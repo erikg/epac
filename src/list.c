@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.3 2004/04/11 19:36:08 erik Exp $
+ * $Id: list.c,v 1.4 2004/07/25 14:55:03 erik Exp $
  */
 
 #include <stdio.h>
@@ -120,7 +120,7 @@ addnewnode (struct filegroup_s *filelist, char *filename, struct stat *sb)
     f = open (filename, O_RDONLY);
     if (read (f, new->buf, size) != size)
     {
-	printf ("Read error!!! %s:%d\n", __FILE__, __LINE__);
+	printf ("Read error!!! %s:%d reading %s\n", __FILE__, __LINE__, filename);
 	exit (-1);
     }
     close (f);

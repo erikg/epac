@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.c,v 1.3 2004/04/11 19:39:14 erik Exp $
+ * $Id: comp.c,v 1.4 2004/07/25 14:55:03 erik Exp $
  */
 
 #include <stdio.h>
@@ -41,6 +41,8 @@
 #include "comp.h"
 #include "display.h"
 #include "epac.h"
+
+#define BSDBAD  0xd0d0d0d0
 
 int
 compare (char *ba, char *bb, int size, int shortsize)
@@ -75,6 +77,23 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
 	a->files->filename);
 
     fn = b->files;
+    printf("\nb: ");
+    while(fn)
+    {
+	printf("%s ", fn->filename);
+	fn = fn->next;
+    }
+
+    fn = a->files;
+    printf("\na: ");
+    while(fn)
+    {
+	printf("%s ", fn->filename);
+	fn = fn->next;
+    }
+    printf("\n\n");
+
+    fn = b->files;
     fg = b->next;
     while (fn)
     {
@@ -94,7 +113,11 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
     reclaimed += (double)b->size;
     printf ("Reclaimed %d bytes (%.0f bytes total (%.0fk %.0fm))\n", b->size,
 	reclaimed, reclaimed / 1024.0, reclaimed / (1024.0 * 1024.0));
+    memset(b, 0, sizeof(b));
     free (b);
+    b = NULL;
+    if(a->files == BSDBAD)
+	printf("%s:%d Whoa, a is blown...\n", __FILE__, __LINE__);
     return fg;
 }
 
@@ -103,6 +126,11 @@ possiblematch (struct filegroup_s *a, struct filegroup_s *b)
 {
     int size, fa, fb, shortsize;
     void *ba, *bb;
+
+    if(a->files == BSDBAD)
+    {
+	printf("%s:%d A is blown!\n",__FILE__,__LINE__);
+    }
 
     ++possiblematchcount;
     size = MIN (a->size, b->size);
@@ -144,6 +172,9 @@ compagainst (struct filegroup_s *a)
 	    if (verbose)
 		showstatus ((float)at / (float)count);
 
+	    if(a==BSDBAD || a->files == BSDBAD || a->buf == BSDBAD)
+		printf("%s:%d a is blown\n", __FILE__, __LINE__);
+
 	    size = MIN (MIN (a->size, b->size), CMPSIZE);
 	    if (memcmp (a->buf, b->buf, size) == 0) /* seeing a crash here... bus fault... a is all forked up */
 	    {
@@ -154,6 +185,10 @@ compagainst (struct filegroup_s *a)
 		possiblematch (a, fg);
 	    } else
 		b = b->next;
+	}
+	if(a->next->buf == BSDBAD)
+	{
+	    printf("About to walk to a bad a... from %s\n", a->files->filename);
 	}
 	a = a->next;
     }
