@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.14 2003/02/17 21:06:09 erik Exp $
+ * $Id: epac.c,v 1.15 2003/02/17 21:39:26 erik Exp $
  */
 
 #include <stdlib.h>
@@ -74,20 +74,15 @@ main (int argc, char **argv)
 
 	tree_t *basedirs = NULL;
 
-	while ((c = getopt (argc, argv, "hvd:sr")) != -1)
+	while ((c = getopt (argc, argv, "hvsr")) != -1)
 		switch (c)
 		{
 		case 'h':
-			return dohelp (argv[0]);
+			dohelp(argv[0]);
+			return EXIT_SUCCESS;
 		case 'v':
-			return doversion (argv[0]);
-		case 'd':
-			buf = optarg;
-			if (tree_search (basedirs, buf, strcmp) == NULL)
-			{
-				basedirs = tree_add (basedirs, buf, strcmp);
-			}
-			break;
+			doversion (argv[0]);
+			return EXIT_SUCCESS;
 		case 's':
 			only_do_savings = 1;
 			break;
@@ -96,15 +91,24 @@ main (int argc, char **argv)
 			break;
 		case ':':
 			printf ("Option \"%s\" missing parameter\n", optarg);
-			return 1 + dohelp (argv[0]);
+			dohelp (argv[0]);
+			return 1;
 		case '?':
-			printf ("Unknown option: %c\n", c);
-			return 1 + dohelp (argv[0]);
+			dohelp (argv[0]);
+			return 1;
 		default:
 			printf ("Unknown error (option: %c)\n", c);
+			dohelp(argv[0]);
 			return 2;
 		}
+	argc -= optind;
+	argv += optind;
 
+	while(*argv)
+	{
+		itree=dirspew(itree,argv,do_recursive); 
+		++argv;
+	}
 
 	if (only_do_savings)
 	{
@@ -116,3 +120,4 @@ main (int argc, char **argv)
 
     return EXIT_SUCCESS;
 }
+
