@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.c,v 1.5 2003/02/18 23:02:02 erik Exp $
+ * $Id: dir.c,v 1.6 2003/02/19 00:39:24 erik Exp $
  */
 
 #include <sys/types.h>
@@ -68,7 +68,7 @@ dirspew (tree_t * itree, char *dir, int only_do_savings, int do_recursive)
 				itree =
 				    dirspew (itree, buf, only_do_savings,
 				    do_recursive);
-		} else if (!stat (buf, &sb))
+		} else if (!stat (buf, &sb) && sb.st_mode&S_IFREG)
 		{
 			tree_t *node;
 			node = tree_search(itree, (void *)(sb.st_ino), eq_i);
@@ -80,15 +80,7 @@ dirspew (tree_t * itree, char *dir, int only_do_savings, int do_recursive)
 			{
 				/* append filename to nodes file list */
 			}
-		} else
-		{
-			printf
-			    ("Unable to stat something readdir showed me... %s\n",
-			    buf);
-			exit (-1);
 		}
-
-/*		itree=tree_add(	*/
 	}
 
 	closedir (d);
