@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.1 2004/04/11 15:06:24 erik Exp $
+ * $Id: main.c,v 1.2 2004/04/11 16:40:50 erik Exp $
  */
 
 #include "epac.h"
@@ -35,5 +35,5 @@
 int
 main (int argc, char **argv)
 {
-    return epac(argc, argv);
+    return epac (argc, argv);
 }
