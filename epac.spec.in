@@ -1,4 +1,4 @@
-Summary: Reduce disk usage by reducing identical files toa single inode.
+Summary: Reduce disk usage by reducing identical files to a single inode.
 Name: @PACKAGE@
 Version: @VERSION@
 Release: 1
