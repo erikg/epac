@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.c,v 1.2 2004/04/11 16:39:46 erik Exp $
+ * $Id: comp.c,v 1.3 2004/04/11 19:39:14 erik Exp $
  */
 
 #include <stdio.h>
@@ -145,7 +145,7 @@ compagainst (struct filegroup_s *a)
 		showstatus ((float)at / (float)count);
 
 	    size = MIN (MIN (a->size, b->size), CMPSIZE);
-	    if (memcmp (a->buf, b->buf, size) == 0)
+	    if (memcmp (a->buf, b->buf, size) == 0) /* seeing a crash here... bus fault... a is all forked up */
 	    {
 		struct filegroup_s *fg;
 
