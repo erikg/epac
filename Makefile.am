@@ -1,7 +1,9 @@
-# $Id: Makefile.am,v 1.11 2004/02/22 15:36:41 erik Exp $
+# $Id: Makefile.am,v 1.12 2004/02/22 18:19:39 erik Exp $
+
+SUBDIRS = tests
 
 bin_PROGRAMS = epac
-epac_SOURCES = comp.c display.c epac.c list.c
+epac_SOURCES = comp.c display.c epac.c list.c main.c
 noinst_HEADERS = comp.h display.h epac.h list.h
 
 dist_man_MANS = epac.1
