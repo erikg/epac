@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.17 2004/04/11 14:34:59 erik Exp $
+# $Id: Makefile.am,v 1.18 2004/04/11 14:45:11 erik Exp $
 
 if CHECK
 TESTDIR = tests
@@ -39,5 +39,5 @@ clean-local:
 	rm -rf doxygen refman.ps refman.pdf
 
 test:
-	(cd test && make test)
+	(cd tests && make test)
 
