@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.1 2004/02/22 18:23:31 erik Exp $
+# $Id: Makefile.am,v 1.2 2004/02/22 20:08:01 erik Exp $
 #
 
 noinst_PROGRAMS=test_epac
@@ -14,4 +14,4 @@ test: test_epac
 	./test_epac
 
 clean-local:
-	rm -f $(epac_src:.c=.o) $(epac-src:.c=.bb) $(epac-src:.c=.bbg)
+	rm -f *.bb *.bbg test.log
