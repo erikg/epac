@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.c,v 1.10 2003/03/02 17:14:11 erik Exp $
+ * $Id: dir.c,v 1.11 2003/04/10 18:03:07 erik Exp $
  */
 
 #include <stdio.h>
@@ -76,10 +76,14 @@ dirspew (hash_t * ihash, char *dir, int only_do_savings, int do_recursive)
 	  node_t *n = node_new (buf, &sb);
 	  unsigned short slot;
 
+	  if(n==NULL){
+		  printf("bad node (%s)\n", buf);
+		  break;
+	  }
+
 	  hash = (list_t **) ihash->table;
 	  slot = *(unsigned short *)n->data;
-	  hash[slot] =
-	    (void *) list_add_at_head ((list_t *) hash, n);
+	  hash[slot] = (void *) list_add_at_head ((list_t *) hash[slot], n);
 
 	  count++;
 	  /*
