@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.21 2003/03/01 19:15:01 erik Exp $
+ * $Id: epac.c,v 1.22 2003/03/02 17:14:11 erik Exp $
  */
 
 #include <stdio.h>
@@ -36,8 +36,9 @@
 #include <unistd.h>
 
 #include "dir.h"
-#include "node.h"
+#include "hash.h"
 #include "list.h"
+#include "node.h"
 
 int
 doversion ()
@@ -68,16 +69,17 @@ print (void *n)
 	node_print_filenames((node_t *)n);
 }
 
+int magic(char *data)
+{
+	return *(unsigned short *)data;
+}
+
 int
 main (int argc, char **argv)
 {
 	int c, only_do_savings = 0, do_recursive = 0;
-	list_t *ilist = NULL;
-/*
-	list_t *dlist = NULL;
-*/
-
 	list_t *basedirs = NULL;
+	hash_t *ihash = hash_spawn(1<<16,magic);
 
 	while ((c = getopt (argc, argv, "hvsr")) != -1)
 		switch (c)
@@ -111,18 +113,31 @@ main (int argc, char **argv)
 
 	while (*argv)
 	{
-		ilist = dirspew (ilist, *argv, only_do_savings, do_recursive);
+		dirspew (ihash, *argv, only_do_savings, do_recursive);
 		++argv;
 	}
+	/*
 	printf("\n");
 
+	*/
 	if (only_do_savings)
 	{
 		printf ("not implemented yet\n");
 		return 0;
 	}
 
-	list_traverse (ilist, print);
-
+	/*
+	list_traverse (ihash, print);
+	*/
+#if 1
+	{
+		int i;
+		list_t **h = ihash->table;
+		for(i=0;i<1<<16;++i)
+		{
+			printf("%d\n", list_length(h[i]));
+		}
+	}
+#endif
 	return EXIT_SUCCESS;
 }

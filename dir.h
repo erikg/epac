@@ -27,14 +27,14 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.h,v 1.3 2003/03/01 18:38:26 erik Exp $
+ * $Id: dir.h,v 1.4 2003/03/02 17:14:11 erik Exp $
  */
 
 #ifndef __DIR_H_
 #define __DIR_H_
 
-#include "list.h"
+#include "hash.h"
 
-list_t *dirspew (list_t * t, char *dir, int only_do_savings, int do_recursive);
+void dirspew (hash_t * t, char *dir, int only_do_savings, int do_recursive);
 
 #endif
