@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.10 2004/02/22 15:25:41 erik Exp $
+ * $Id: list.c,v 1.11 2004/02/22 20:17:55 erik Exp $
  */
 
 #include <stdio.h>
@@ -49,6 +49,16 @@
 
 struct filegroup_s *filelist = NULL;
 
+/**
+ * Search the list for the first occurence of 'inode'. Note that the returned
+ * list is not discrete; it is the list of which the head matches the inode. The
+ * next param should probably be ignored, but cannot be set to null without
+ * damage to the list. 
+ * @param inode The key to search on.
+ * @param fl The list to search;
+ * @return The list starting with the matching element. The returned sublist is
+ * NOT a copy, do NOT modify it.
+ */
 struct filegroup_s *
 searchlist (ino_t inode, struct filegroup_s *fl)
 {
@@ -59,6 +69,12 @@ searchlist (ino_t inode, struct filegroup_s *fl)
 	|| fl->inode == inode ? fl : searchlist (inode, fl->next);
 }
 
+/**
+ * Add a filename to an existing inode in the list.
+ * @param fl The filegroup node to add the filename to.
+ * @param filename The filename to add.
+ * @return Void. Nil.
+ */
 void
 addfilename (struct filegroup_s *fl, char *filename)
 {
@@ -71,6 +87,13 @@ addfilename (struct filegroup_s *fl, char *filename)
     fl->files = f;
 }
 
+/**
+ * Create a new node in the linked list. (found a new inode). The new node is
+ * prepended to the list, and the list returned.
+ * @param filelist The filelist to insert this element at.
+ * @param sb The stat struct for the new element.
+ * @return The new list.
+ */
 struct filegroup_s *
 addnewnode (struct filegroup_s *filelist, char *filename, struct stat *sb)
 {
@@ -106,6 +129,14 @@ addnewnode (struct filegroup_s *filelist, char *filename, struct stat *sb)
     return new;
 }
 
+/**
+ * Add a filename/stat to the filelist global.
+ * @todo Refactor to take a list and return the new list.
+ * @param filename The name of the file (with path).
+ * @param sb The stat block for this file. Used to determine if the file is a
+ * dup or not.
+ * @return Void. Nothing. Assumes success.
+ */
 void
 addtolist (char *filename, struct stat *sb)
 {
@@ -123,6 +154,13 @@ addtolist (char *filename, struct stat *sb)
     return;
 }
 
+/**
+ * Query the length of a (filegroup_s) linked list. This is a simple recursive
+ * function. If fed a NULL, it will return a 0. If fed a bad pointer, it will
+ * crash, or worse.
+ * @param f the list to query
+ * @return the length of the list
+ */
 int
 listlength (struct filegroup_s *f)
 {
