@@ -1,3 +1,5 @@
+# $Id: Makefile,v 1.6 2002/12/12 04:35:04 erik Exp $
+
 PACKAGE=epac
 VERSION=0.3
 DIST=${PACKAGE}-${VERSION}
