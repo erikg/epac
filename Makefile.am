@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.12 2004/02/22 18:19:39 erik Exp $
+# $Id: Makefile.am,v 1.13 2004/02/22 18:49:21 erik Exp $
 
 SUBDIRS = tests
 
@@ -34,3 +34,6 @@ docs:
 
 clean-local:
 	rm -rf doxygen refman.ps refman.pdf
+
+test:
+	(cd tests && make test)
