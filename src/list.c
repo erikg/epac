@@ -9,9 +9,9 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger. 
+ * and hardlink to the larger.
  *                                                                           *
- * This program is free software; you can redistribute it and/or modify      * 
+ * This program is free software; you can redistribute it and/or modify      *
  * it under the terms of the GNU General Public License as published by      *
  * the Free Software Foundation; either version 2 of the License, or         *
  * (at your option) any later version.                                       *
@@ -27,15 +27,15 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.2 2004/04/11 16:40:50 erik Exp $
+ * $Id: list.c,v 1.3 2004/04/11 19:36:08 erik Exp $
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef __linux__
-# ifndef __USE_BSD
-#  define __USE_BSD
-# endif
+#ifndef __USE_BSD
+#define __USE_BSD
+#endif
 #endif
 #include <string.h>
 #include <sys/fcntl.h>
@@ -53,7 +53,7 @@ struct filegroup_s *filelist = NULL;
  * Search the list for the first occurence of 'inode'. Note that the returned
  * list is not discrete; it is the list of which the head matches the inode. The
  * next param should probably be ignored, but cannot be set to null without
- * damage to the list. 
+ * damage to the list.
  * @param inode The key to search on.
  * @param fl The list to search;
  * @return The list starting with the matching element. The returned sublist is
@@ -62,8 +62,10 @@ struct filegroup_s *filelist = NULL;
 struct filegroup_s *
 searchlist (ino_t inode, struct filegroup_s *fl)
 {
+
     /*
-     * if the compile doesn't short circuit the || like it should, this will cause a segfault or worse 
+     * if the compile doesn't short circuit the || like it should, this will
+     * cause a segfault or worse
      */
     return fl == NULL
 	|| fl->inode == inode ? fl : searchlist (inode, fl->next);
@@ -130,6 +132,39 @@ addnewnode (struct filegroup_s *filelist, char *filename, struct stat *sb)
 }
 
 /**
+ * Delete filenode from this list...
+ * @param node Node to delete from the list.
+ * @return The first node in the list (will walk backwards).
+ */
+struct filegroup_s *
+list_deletenode (struct filegroup_s *node)
+{
+    struct filegroup_s *next, *prev;
+
+    if (node == NULL)
+	return NULL;
+    next = node->next;
+    prev = node->prev;
+    if (prev)
+	prev->next = next;
+    if (next)
+	next->prev = prev;
+    while (node->files)
+    {
+	struct filename_s *name;
+
+	name = node->files->next;
+	free (node->files->filename);
+	node->files = name;
+    }
+    free (node->buf);
+    free (node);
+    while (prev && prev->prev)
+	prev = prev->prev;
+    return prev ? prev : next;
+}
+
+/**
  * Add a filename/stat to the filelist global.
  * @todo Refactor to take a list and return the new list.
  * @param filename The name of the file (with path).
@@ -149,7 +184,8 @@ addtolist (char *filename, struct stat *sb)
     fl = searchlist (sb->st_ino, filelist);
     if (fl == NULL)
 	filelist = addnewnode (filelist, filename, sb);
-    else			/* it's already in the list, just add this file name to the inode entry */
+    else			/* it's already in the list, just add this
+				 * file name to the inode entry */
 	addfilename (fl, filename);
     return;
 }
