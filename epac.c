@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.13 2003/02/09 01:40:13 erik Exp $
+ * $Id: epac.c,v 1.14 2003/02/17 21:06:09 erik Exp $
  */
 
 #include <stdlib.h>
@@ -39,89 +39,80 @@
 int
 doversion ()
 {
-  printf
-    ("\
+	printf ("\
 %s %s Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>\n\
-%s comes with ABSOLUTELY NO WARRANTY. Please read the GPL for details.\n\n",
-	PACKAGE, PACKAGE, VERSION);
-  return 0;
+%s comes with ABSOLUTELY NO WARRANTY. Please read the GPL for details.\n\n", PACKAGE, PACKAGE, VERSION);
+	return 0;
 }
 
 int
 dohelp (char *name)
 {
-  doversion (name);
-  printf ("Usage\n\
-\t%s [-hv] [-d <dir>] [-s]\n\
+	doversion (name);
+	printf ("Usage\n\
+\t%s [-hv] [-s] <dir>\n\
 \n\
  -s      Only do savings\n\
  -h      Display this help screen\n\
  -v      Display the version\n\
 \n", name, name);
-  return 0;
+	return 0;
 }
 
-void print(void *n)
+void
+print (void *n)
 {
-	printf("%s\n", (char *)n);
+	printf ("%s\n", (char *)n);
 }
 
 int
 main (int argc, char **argv)
 {
-  int c, only_do_savings=0, do_recursive=0;
-  char *buf = NULL;
-  tree_t *itree = NULL, *dtree = NULL;
+	int c, only_do_savings = 0, do_recursive = 0;
+	char *buf = NULL;
+	tree_t *itree = NULL, *dtree = NULL;
 
-  tree_t *basedirs = NULL;
-  while ((c = getopt (argc, argv, "hvd:sr")) != -1)
-    switch (c)
-      {
-      case 'h':
-	return dohelp (argv[0]);
-      case 'v':
-	return doversion (argv[0]);
-      case 'd':
-	buf=optarg;
-	if(tree_search(basedirs, buf, strcmp)==NULL)
+	tree_t *basedirs = NULL;
+
+	while ((c = getopt (argc, argv, "hvd:sr")) != -1)
+		switch (c)
+		{
+		case 'h':
+			return dohelp (argv[0]);
+		case 'v':
+			return doversion (argv[0]);
+		case 'd':
+			buf = optarg;
+			if (tree_search (basedirs, buf, strcmp) == NULL)
+			{
+				basedirs = tree_add (basedirs, buf, strcmp);
+			}
+			break;
+		case 's':
+			only_do_savings = 1;
+			break;
+		case 'r':
+			do_recursive = 1;
+			break;
+		case ':':
+			printf ("Option \"%s\" missing parameter\n", optarg);
+			return 1 + dohelp (argv[0]);
+		case '?':
+			printf ("Unknown option: %c\n", c);
+			return 1 + dohelp (argv[0]);
+		default:
+			printf ("Unknown error (option: %c)\n", c);
+			return 2;
+		}
+
+
+	if (only_do_savings)
 	{
-		basedirs = tree_add(basedirs, buf, strcmp);
+		printf ("not implemented yet\n");
+		return 0;
 	}
-	break;
-      case 's':
-	only_do_savings=1;
-	break;
-      case 'r':
-	do_recursive=1;
-	break;
-      case ':':
-	printf ("Option \"%s\" missing parameter\n", optarg);
-	return 1 + dohelp (argv[0]);
-      case '?':
-	printf ("Unknown option: %c\n", c);
-	return 1 + dohelp (argv[0]);
-      default:
-	printf ("Unknown error (option: %c)\n", c);
-	return 2;
-      }
 
+	tree_traverse_213 (basedirs, print);
 
-  if(only_do_savings)
-  {
-	  printf("not implemented yet\n");
-	  return 0;
-  }
-
-tree_traverse_213(basedirs, print);
-
-#if 0
-  for each dir
-    for each entry
-    	if inode new
-		read node
-		ins into itree
-		ins into dtree
-#endif
-  return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
-
