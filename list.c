@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.7 2003/12/27 17:18:55 erik Exp $
+ * $Id: list.c,v 1.8 2003/12/27 17:35:28 erik Exp $
  */
 
 #include <stdio.h>
@@ -60,7 +60,7 @@ addfilename (struct filegroup_s *fl, char *filename)
     struct filename_s *f;
 
     f = (struct filename_s *)malloc (sizeof (struct filename_s));
-    memset (f, NULL, sizeof (struct filename_s));
+    memset (f, 0, sizeof (struct filename_s));
     f->filename = strdup (filename);
     f->next = fl->files;
     fl->files = f;
@@ -77,7 +77,7 @@ addnewnode (struct filegroup_s *filelist, char *filename, struct stat *sb)
     size = MIN (sb->st_size, CMPSIZE);
 
     new = (struct filegroup_s *)malloc (sizeof (struct filegroup_s));
-    memset (new, NULL, sizeof (struct filegroup_s));
+    memset (new, 0, sizeof (struct filegroup_s));
     new->inode = sb->st_ino;
     addfilename (new, filename);
     new->size = sb->st_size;
