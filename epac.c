@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.12 2003/02/08 16:20:12 erik Exp $
+ * $Id: epac.c,v 1.13 2003/02/09 01:40:13 erik Exp $
  */
 
 #include <stdlib.h>
@@ -61,6 +61,11 @@ dohelp (char *name)
   return 0;
 }
 
+void print(void *n)
+{
+	printf("%s\n", (char *)n);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -79,7 +84,9 @@ main (int argc, char **argv)
       case 'd':
 	buf=optarg;
 	if(tree_search(basedirs, buf, strcmp)==NULL)
+	{
 		basedirs = tree_add(basedirs, buf, strcmp);
+	}
 	break;
       case 's':
 	only_do_savings=1;
@@ -105,7 +112,7 @@ main (int argc, char **argv)
 	  return 0;
   }
 
-
+tree_traverse_213(basedirs, print);
 
 #if 0
   for each dir

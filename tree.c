@@ -27,11 +27,20 @@
  ****************************************************************************/
 
 /*
- * $Id: tree.c,v 1.1 2003/02/08 15:07:58 erik Exp $
+ * $Id: tree.c,v 1.2 2003/02/09 01:40:13 erik Exp $
  */
 
 #include <stdio.h>
 #include "tree.h"
+
+int scrunch(int x)
+{
+	if(x==0)return 0;
+	if(x<0)return -1;
+	if(x>0)return -1;
+	printf("wtf???\n");
+	exit(-1);
+}
 
 tree_t *tree_add(tree_t *tree, void *data, int (*cmp)(void *a,void *b))
 {
@@ -39,9 +48,10 @@ tree_t *tree_add(tree_t *tree, void *data, int (*cmp)(void *a,void *b))
 	{
 		tree_t *t = (tree_t *)malloc(sizeof(tree_t));
 		t->data = data;
+		t->left=t->right=NULL;
 		return t;
 	}
-	switch(cmp(tree->data, data))
+	switch(scrunch(cmp(tree->data, data)))
 	{
 		case -1:
 			tree->left=tree_add(tree->left, data, cmp);
@@ -59,7 +69,7 @@ tree_t *tree_add(tree_t *tree, void *data, int (*cmp)(void *a,void *b))
 void *tree_search(tree_t *tree, void *data, int (*cmp)(void *a, void *b))
 {
 	if(tree==NULL)return NULL;
-	switch(cmp(tree->data, data))
+	switch(scrunch(cmp(tree->data, data)))
 	{
 		case -1: return tree_search(tree->left, data, cmp);
 		case 0: return tree;
@@ -67,4 +77,17 @@ void *tree_search(tree_t *tree, void *data, int (*cmp)(void *a, void *b))
 	}
 	printf("Should not have gotten here: %s %s %d\n", __FILE__, __FUNCTION__, __LINE__);
 	return NULL;
+}
+
+void
+tree_traverse_213 (tree_t * tree, void (*func) (void * n))
+{
+    if (tree == NULL)
+	return;
+    if (tree->left)
+	tree_traverse_213 (tree->left, func);
+    func (tree->data);
+    if (tree->right)
+	tree_traverse_213 (tree->right, func);
+    return;
 }

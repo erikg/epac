@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: tree.h,v 1.1 2003/02/08 15:07:58 erik Exp $
+ * $Id: tree.h,v 1.2 2003/02/09 01:40:13 erik Exp $
  */
 
 typedef struct tree_s
@@ -38,4 +38,4 @@ typedef struct tree_s
 
 tree_t *tree_add(tree_t *tree, void *data, int (*cmp)(void *a,void *b));
 void *tree_search(tree_t *tree, void *data, int (*cmp)(void *a, void *b));
-
+void tree_traverse_213(tree_t *node, void (*func)(void *n));
