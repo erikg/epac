@@ -27,16 +27,14 @@
  ****************************************************************************/
 
 /*
- * $Id: hash.c,v 1.1 2003/03/01 19:15:01 erik Exp $
+ * $Id: hash.c,v 1.2 2003/03/01 19:17:02 erik Exp $
  */
 
-typedef struct hash_s
-{
-  int (*func) (void *);
-  int width;
-  void *table;
-}
-hash_t;
+#include <stdio.h>
+#include <stdlib.h>
+
+
+#include "hash.h"
 
 hash_t *
 hash_spawn (int width, int (*func) (void *))
@@ -53,7 +51,7 @@ hash_lookup (hash_t * hash, void *data)
 {
   int i;
   i = hash->func (data);
-  if (i > width || i < 0)
+  if (i > hash->width || i < 0)
     printf ("Bad hash!\n");
   else
     return &hash->table[i];

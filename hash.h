@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: hash.h,v 1.1 2003/03/01 19:15:01 erik Exp $
+ * $Id: hash.h,v 1.2 2003/03/01 19:17:02 erik Exp $
  */
 
 #ifndef __HASH_H_
@@ -41,7 +41,7 @@ typedef struct hash_s
 }
 hash_t;
 
-hash_t hash_spawn (int width);
+hash_t *hash_spawn (int width, int (*func)(void *));
 void *hash_lookup (hash_t * hash, void *data);
 
 #endif
