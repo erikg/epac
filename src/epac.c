@@ -11,7 +11,7 @@
  * to combine them. If you say yes, it will delete the smaller of the files  *
  * and hardlink to the larger.                                               *
  *                                                                           *
- * This program is free software; you can redistribute it and/or modify      * 
+ * This program is free software; you can redistribute it and/or modify      *
  * it under the terms of the GNU General Public License as published by      *
  * the Free Software Foundation; either version 2 of the License, or         *
  * (at your option) any later version.                                       *
@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.3 2004/04/11 18:28:33 erik Exp $
+ * $Id: epac.c,v 1.4 2004/04/11 19:42:05 erik Exp $
  */
 
 #include <stdio.h>
@@ -35,6 +35,7 @@
 #include <unistd.h>
 #include <dirent.h>
 
+/* this should come out of the src and into configure.ac/config.h */
 #ifdef __linux__
 # ifndef __USE_BSD
 #  define __USE_BSD
@@ -71,17 +72,11 @@ dohelp (char *name)
 {
     doversion (name);
 
-/*
-    printf ("Usage\n\
-\t%s [-hv] [-s] <dir>\n\
-\n\
- -C      \n\
- -r      Recursive operation\n\
- -s      Only do savings\n\
- -h      Display this help screen\n\
- -v      Display the version\n\
-\n", name);
-*/
+    /*
+     * printf ("Usage\n\ \t%s [-hv] [-s] <dir>\n\ \n\ -C      \n\ -r
+     * Recursive operation\n\ -s      Only do savings\n\ -h      Display this
+     * help screen\n\ -v      Display the version\n\ \n", name);
+     */
     printf ("Usage\n\
 \t%s [-hv] [-s] <dir>\n\
 \n\
@@ -137,7 +132,6 @@ epac (int argc, char **argv)
 	dohelp (name);
 	return 2;
     }
-
     while (argc--)
     {
 	d = opendir (*argv);
@@ -197,7 +191,9 @@ epac_handle_match (struct filegroup_s *a, struct filegroup_s *b)
     {
 	char c[BUFSIZ];
 
-	printf("\n%s <-> %s\n", a->files->filename, b->files->filename);
+	printf
+	    ("\n====================================================================\n(%d)\t\"%s\"\n(%d)\t\"%s\"\n====================================================================\n",
+	    a->size, a->files->filename, b->size, b->files->filename);
 	while (1)
 	{
 	    printf ("\aCombine? y/n > ");
