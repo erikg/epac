@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.9 2003/12/27 18:28:49 erik Exp $
+# $Id: Makefile.am,v 1.10 2004/01/02 12:59:19 erik Exp $
 
 bin_PROGRAMS = epac
 epac_SOURCES = comp.c display.c epac.c list.c
@@ -9,10 +9,10 @@ DIST_EXTRA = TODO epac.spec.in
 
 .PHONY : rpm
 rpm: dist
-	cp $(PACKAGE)-$(VERSION).tar.gz /usr/src/redhat/SOURCES/
-	rpm -ba data/$(PACKAGE).spec
-	cp /usr/src/redhat/RPMS/i386/$(PACKAGE)-$(VERSION)-*.i386.rpm .
-	cp /usr/src/redhat/SRPMS/$(PACKAGE)-$(VERSION)-*.src.rpm .
+	cp $(PACKAGE)-$(VERSION).tar.gz ${HOME}/rpm/SOURCES/
+	rpmbuild -ba $(PACKAGE).spec
+	cp ${HOME}/rpm/RPMS/i386/$(PACKAGE)-$(VERSION)-*.i386.rpm .
+	cp ${HOME}/rpm/SRPMS/$(PACKAGE)-$(VERSION)-*.src.rpm .
 
 .PHONY : deb
 deb: 
