@@ -1,5 +1,5 @@
 /*
- * $Id: test_list.c,v 1.2 2004/02/22 20:08:01 erik Exp $
+ * $Id: test_list.c,v 1.3 2004/04/11 14:43:32 erik Exp $
  */
 
 #include <stdio.h>
@@ -62,7 +62,7 @@ START_TEST (test_list_search)
 
     fail_unless (stat ("test_epac", sb + 2) == 0,
 	"unable to stat \"test_epac\"");
-    addtolist ("test_epac", sb + 1);
+    addtolist ("test_epac", sb + 2);
 
     fail_unless (filelist != NULL, "filelist is null");
 
