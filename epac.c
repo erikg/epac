@@ -29,9 +29,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
-#include <unistd.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <sys/uio.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
 
@@ -41,12 +42,12 @@
 	 * it's too large, it'll burn up memory. I suggest something between
 	 * 256 and 4096. This is the 'safe' default... 
 	 */
-#define CMPSIZE 1024
+#define CMPSIZE 256
 
 #define MIN(a,b) (a)<(b)?(a):(b)
 #define MAX(a,b) (a)>(b)?(a):(b)
 
-int count = 0, inodecount = 0, filecount = 0, at = 0, reclaimed = 0;
+int count = 0, inodecount = 0, filecount = 0, possiblematchcount = 0, at = 0, reclaimed = 0;
 
 struct filename_s {
     char *filename;
@@ -170,21 +171,28 @@ printfilenames (struct filename_s *f)
 void
 showstatus (float stat)
 {
-    int i, j, blings;
+    static int dirty = 0;
+    static float last = -1.0;
+    static char buf[1024] =
+	"\r   .  % [                                                                   ] ";
+    int flooble;
 
-    if (stat > 1.0)
-	stat = 1.0;
-    printf ("\r% 03.3f%% [", 100.0 * stat);
-    blings = (int)(stat * 62.0);
+    if (fabs (stat - last) < .0001)
+	return;
 
-/*
-    for (i = 0; i < blings; ++i)
-	printf ("=");
-    printf (">");
-    for (i = blings; i <= 62; ++i)
-	printf (" ");
-    printf ("]");
-*/
+    last = stat;
+    sprintf (buf + 1, "%03.02f%%", 100.0 * stat);
+    flooble = (int)(78.0 * stat);
+    if (flooble > dirty)
+    {
+	int i = 10;
+
+	dirty = flooble;
+	for (; i < flooble; ++i)
+	    buf[i] = '=';
+    }
+    write (STDOUT_FILENO, buf, 78);
+    fflush (stdout);
     return;
 }
 
@@ -225,9 +233,10 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
 struct filegroup_s *
 possiblematch (struct filegroup_s *a, struct filegroup_s *b)
 {
-    int size, fa, fb;
-    void *ba, *bb;
+    static int size, fa, fb;
+    static void *ba, *bb;
 
+    ++possiblematchcount;
     size = MIN (a->size, b->size);
     fa = open (a->files->filename, O_RDONLY);
     fb = open (b->files->filename, O_RDONLY);
@@ -286,7 +295,7 @@ compagainst (struct filegroup_s *a)
 	    ++at;
 	    showstatus ((float)at / (float)count);
 
-	    size = MIN (MIN (a->size, b->size), 4096);
+	    size = MIN (MIN (a->size, b->size), CMPSIZE);
 	    if (memcmp (a->buf, b->buf, size) == 0)
 	    {
 		struct filegroup_s *fg;
@@ -310,12 +319,12 @@ main (int argc, char **argv)
     int i = 0;
     char buf[BUFSIZ];
 
-    if (argc != 2)
+    if (argc != 2 || (d = opendir (argv[1])) == NULL)
     {
-	printf ("Usage\n\t: %s <dir>\n", argv[0]);
+	printf ("Usage:\n\t %s <dir>\n", argv[0]);
 	return -1;
     }
-    d = opendir (argv[1]);
+
     while (de = readdir (d))
     {
 	static struct stat sb;
@@ -325,8 +334,9 @@ main (int argc, char **argv)
 	    perror ("stat issue? :");
 	else if (sb.st_mode & S_IFREG && sb.st_size)
 	    addtolist (buf, &sb);
+	if (i % 128)
+	    printf ("\rFiles: %d\tInodes: %d", filecount, inodecount);
 	++i;
-	printf ("\rFiles: %d\tInodes: %d", filecount, inodecount);
     }
     printf ("\n");
     closedir (d);
@@ -340,6 +350,7 @@ main (int argc, char **argv)
     else
 	printf ("uh?\n");
     printf ("\n");
+    printf ("%d possiblematch calls, %.2f%% scans\n", possiblematchcount, 100.0*possiblematchcount/count);
     printf ("%d bytes (%0.2f k, %02.f m) recovered\n", reclaimed,
 	(float)reclaimed / 1024.0, (float)reclaimed / (1024.0 * 1024.0));
     return 0;

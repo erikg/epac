@@ -1,0 +1,33 @@
+fixed bug that captures more dups and gives huge speed boost
+added makefile
+added dir-read status
+fixed bug that missed a LOT of dups if size != 4096
+fixed bug that crashes on bad dir
+fixed cosmetic bug in help
+
+old
+
+erik@fenris /tmp$ time $ ./epac /mnt/ad1/s4/gnutella
+Dir read completed, 4321 inodes, estimating 9335520 scans
+ 99.896% [=====================================================================>
+]
+7349877 bytes (7177.61 k, 07 m) recovered
+
+real    84m20.265s
+user    3m55.935s
+sys     49m46.618s
+
+
+
+new
+
+erik@fenris ~/devel/epac$ time ./epac /mnt/ad1/s4/gnutella
+Files: 6473     Inodes: 4320
+Dir read completed, 4321 inodes, estimating 9335520 scans
+ 99.977% [=============================================================>  ]
+0 bytes (0.00 k, 00 m) recovered
+
+real    4m6.997s
+user    2m39.257s
+sys     0m42.349s
+
