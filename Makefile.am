@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.14 2004/03/03 14:08:51 erik Exp $
+# $Id: Makefile.am,v 1.15 2004/03/14 13:18:53 erik Exp $
 
 SUBDIRS = @TEST@
 
@@ -7,7 +7,7 @@ epac_SOURCES = comp.c display.c epac.c list.c main.c
 noinst_HEADERS = comp.h display.h epac.h list.h
 
 dist_man_MANS = epac.1
-DIST_EXTRA = TODO epac.spec.in
+EXTRA_DIST = TODO epac.spec.in
 
 .PHONY : rpm
 rpm: dist
