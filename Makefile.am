@@ -1,7 +1,7 @@
-# $Id: Makefile.am,v 1.16 2004/04/11 14:30:43 erik Exp $
+# $Id: Makefile.am,v 1.17 2004/04/11 14:34:59 erik Exp $
 
 if CHECK
-TESTDIR = test
+TESTDIR = tests
 endif
 SUBDIRS =  $(TESTDIR)
 

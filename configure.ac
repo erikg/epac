@@ -1,4 +1,4 @@
-dnl $Id: configure.ac,v 1.3 2004/04/11 14:30:43 erik Exp $
+dnl $Id: configure.ac,v 1.4 2004/04/11 14:34:59 erik Exp $
 
 AC_INIT
 AC_CONFIG_SRCDIR([epac.c])
@@ -21,5 +21,5 @@ AC_SUBST(CHECK_CFLAGS)
 AC_SUBST(CHECK_LIBS)
 AC_SUBST(COVERAGE_CFLAGS)
 
-AC_CONFIG_FILES([Makefile epac.spec doxygen.conf test/Makefile])
+AC_CONFIG_FILES([Makefile epac.spec doxygen.conf tests/Makefile])
 AC_OUTPUT
