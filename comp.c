@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.c,v 1.2 2003/12/27 17:18:54 erik Exp $
+ * $Id: comp.c,v 1.3 2004/02/22 15:25:50 erik Exp $
  */
 
 #include <stdio.h>
@@ -59,6 +59,7 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
     struct filename_s *fn;
     struct filename_s *blah;
 
+	/* make a the larger of the two, so b must be reduced */
     if (b->size > a->size)
     {
 	struct filegroup_s *tmp;
