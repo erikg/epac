@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.9 2002/12/12 20:35:20 erik Exp $
+ * $Id: epac.c,v 1.10 2002/12/14 14:26:25 erik Exp $
  */
 
 #include <stdio.h>
@@ -175,17 +175,17 @@ printfilenames (struct filename_s *f)
 void
 showstatus (float stat)
 {
-    static int dirty = 0;
+    static int dirty = -1;
     static float last = -1.0;
     static char buf[1024] =
-	"\r   .  % [                                                                   ] ";
+	"\r  0.00% [                                                                   ] ";
     int flooble;
 
     if (fabs (stat - last) < .0001)
 	return;
 
     last = stat;
-    sprintf (buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%.02f%%",
+    sprintf (buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%0.02f%%",
 	100.0 * stat);
     flooble = (int)(67.0 * stat);
     if (flooble > dirty)
@@ -197,7 +197,7 @@ showstatus (float stat)
 	    buf[i + 10] = '=';
 	write (STDOUT_FILENO, buf, 78);
     } else
-	write (STDOUT_FILENO, buf, 10);
+	write (STDOUT_FILENO, buf, 7);
     fflush (stdout);
     return;
 }
