@@ -28,6 +28,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include <fcntl.h>
 #include <dirent.h>
 #include <sys/types.h>
@@ -42,7 +43,7 @@
 	 * it's too large, it'll burn up memory. I suggest something between
 	 * 256 and 4096. This is the 'safe' default... 
 	 */
-#define CMPSIZE 256
+#define CMPSIZE 40960
 
 #define MIN(a,b) (a)<(b)?(a):(b)
 #define MAX(a,b) (a)>(b)?(a):(b)
@@ -239,7 +240,9 @@ possiblematch (struct filegroup_s *a, struct filegroup_s *b)
 {
     static int size, fa, fb;
     static void *ba, *bb;
-
+printf("POssible match!\n");
+printfilenames(a->files);
+printfilenames(b->files);
     ++possiblematchcount;
     size = MIN (a->size, b->size);
     fa = open (a->files->filename, O_RDONLY);
