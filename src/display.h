@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: display.h,v 1.1 2004/04/11 15:06:24 erik Exp $
+ * $Id: display.h,v 1.2 2004/04/23 00:32:50 erik Exp $
  */
 
 #ifndef DISPLAY_H
@@ -37,5 +37,6 @@
 
 void printfilenames (struct filename_s *f);
 void showstatus (float stat);
+void display_set_width (int width);
 
 #endif

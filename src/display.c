@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: display.c,v 1.4 2004/04/11 16:40:50 erik Exp $
+ * $Id: display.c,v 1.5 2004/04/23 00:32:50 erik Exp $
  */
 
 #include <stdio.h>
@@ -49,13 +49,21 @@ printfilenames (struct filename_s *f)
     return;
 }
 
+static int columns = -1;
+
+void
+display_set_width (int width)
+{
+    columns = width;
+    return;
+}
+
 void
 showstatus (float stat)
 {
     static int dirty = -1;
     static float last = -1.0;
     static char buf[1024];
-    static int columns = -1;
     int flooble;
 
     if (columns == -1)

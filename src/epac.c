@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.4 2004/04/11 19:42:05 erik Exp $
+ * $Id: epac.c,v 1.5 2004/04/23 00:32:50 erik Exp $
  */
 
 #include <stdio.h>
@@ -78,11 +78,12 @@ dohelp (char *name)
      * help screen\n\ -v      Display the version\n\ \n", name);
      */
     printf ("Usage\n\
-\t%s [-hv] [-s] <dir>\n\
+\t%s [-hv] [-C [-W <cols>]] <dir>\n\
 \n\
- -C      \n\
- -h      Display this help screen\n\
- -v      Display the version\n\
+ -C                   Display completion information\n\
+ -W NUM  --width=NUM  Output at most NUM (default 80) characters per line.\n\
+ -h                   Display this help screen\n\
+ -v                   Display the version\n\
 \n", name);
     return 0;
 }
@@ -100,6 +101,9 @@ epac (int argc, char **argv)
 	{
 	case 'C':
 	    verbose = 1;
+	    break;
+	case 'W':
+	    display_set_width (atoi (optarg));
 	    break;
 	case 'h':
 	    dohelp (name);
