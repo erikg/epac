@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: display.c,v 1.2 2004/04/11 15:33:42 erik Exp $
+ * $Id: display.c,v 1.3 2004/04/11 15:56:50 erik Exp $
  */
 
 #include <stdio.h>
@@ -54,8 +54,7 @@ showstatus (float stat)
 {
     static int dirty = -1;
     static float last = -1.0;
-    static char buf[1024] =
-	"\r  0.00%%  [                                                                   ] ";
+    static char buf[1024];
     static int columns=-1;
     int flooble;
 
@@ -67,23 +66,34 @@ showstatus (float stat)
 	    columns = atoi(COL);
 	else
 	    columns = 80;
+
+	if (columns>1023)
+	    columns = 1023;
+
+	printf("Columns: %d\n", columns);
+	memset(buf,' ',columns);
+	buf[0] = '\r';
+	buf[9] = '%';
+	buf[11] = '[';
+	buf[columns-1] = ']';
+	buf[columns] = 0;
     }
 
     if (fabs (stat - last) < .0001)
 	return;
 
     last = stat;
-    sprintf (buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%0.02f%%",
-	100.0 * stat);
-    flooble = (int)(columns-14 * stat);
+    sprintf (buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%0.02f", 100.0 * stat);
+    flooble = (int)((columns-12) * stat);
     if (flooble > dirty)
     {
 	int i;
+	usleep(100);
 
 	dirty = flooble;
 	for (i = 0; i < flooble; ++i)
-	    buf[i + 10] = '=';
-	write (STDOUT_FILENO, buf, columns-2);
+	    buf[i + 12] = '=';
+	write (STDOUT_FILENO, buf, columns);
     } else
 	write (STDOUT_FILENO, buf, 7);
     fflush (stdout);
