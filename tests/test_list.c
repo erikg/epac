@@ -1,5 +1,5 @@
 /*
- * $Id: test_list.c,v 1.5 2004/04/11 15:06:24 erik Exp $
+ * $Id: test_list.c,v 1.6 2004/04/11 19:36:38 erik Exp $
  */
 
 #include <stdio.h>
@@ -83,6 +83,43 @@ START_TEST (test_list_search)
 }
 END_TEST
 
+START_TEST (test_list_deletenode)
+{
+    struct stat sb;
+    char buf[BUFSIZ];
+
+    filelist = NULL;
+    fail_unless (stat ("test_list.c", &sb) == 0, "unable to stat \"test_list.c\"");
+    addtolist ("test_list.c", &sb);
+
+    fail_unless (stat ("test_list.h", &sb) == 0, "unable to stat \"test_list.h\"");
+    addtolist ("test_list.h", &sb);
+
+    fail_unless (stat ("test_epac", &sb) == 0, "unable to stat \"test_epac\"");
+    addtolist ("test_epac", &sb);
+
+    fail_unless (stat ("Makefile.am", &sb) == 0, "unable to stat \"Makefile.am\"");
+    addtolist ("Makefile.am", &sb);
+
+    fail_unless (filelist != NULL, "filelist is null");
+
+    fail_unless (!( strcmp(filelist->files->filename, "Makefile.am") && strcmp(filelist->next->files->filename, "test_epac") && strcmp(filelist->next->next->files->filename, "test_list.h") && strcmp(filelist->next->next->next->files->filename, "test_list.c") ), "Corrupted list");
+
+    filelist = list_deletenode(filelist->next);
+    fail_unless (!( strcmp(filelist->files->filename, "Makefile.am") && strcmp(filelist->next->files->filename, "test_list.h") && strcmp(filelist->next->next->files->filename, "test_list.c") ), "Corrupted list");
+
+    filelist = list_deletenode(filelist->next->next);
+    fail_unless (!( strcmp(filelist->files->filename, "Makefile.am") && strcmp(filelist->next->files->filename, "test_list.h") ), "Corrupted list");
+
+    filelist = list_deletenode(filelist);
+    fail_unless (!( strcmp(filelist->files->filename, "test_list.h") ), "Corrupted list");
+
+    filelist = list_deletenode(filelist);
+    fail_unless ( filelist==NULL , "Corrupted list");
+
+}
+END_TEST
+
 TCase *
 test_list (Suite *s)
 {
@@ -90,6 +127,7 @@ test_list (Suite *s)
     tcase_add_test (tc_list, test_list_add);
     tcase_add_test (tc_list, test_list_length);
     tcase_add_test (tc_list, test_list_search);
+    tcase_add_test (tc_list, test_list_deletenode);
 
     return tc_list;
 }
