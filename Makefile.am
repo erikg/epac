@@ -1,6 +1,9 @@
-# $Id: Makefile.am,v 1.15 2004/03/14 13:18:53 erik Exp $
+# $Id: Makefile.am,v 1.16 2004/04/11 14:30:43 erik Exp $
 
-SUBDIRS = @TEST@
+if CHECK
+TESTDIR = test
+endif
+SUBDIRS =  $(TESTDIR)
 
 bin_PROGRAMS = epac
 epac_SOURCES = comp.c display.c epac.c list.c main.c
