@@ -41,12 +41,12 @@
 	 * it's too large, it'll burn up memory. I suggest something between
 	 * 256 and 4096. This is the 'safe' default... 
 	 */
-#define CMPSIZE 256
+#define CMPSIZE 1024
 
 #define MIN(a,b) (a)<(b)?(a):(b)
 #define MAX(a,b) (a)>(b)?(a):(b)
 
-int count = 0, at = 0, reclaimed = 0;
+int count = 0, inodecount = 0, filecount = 0, at = 0, reclaimed = 0;
 
 struct filename_s {
     char *filename;
@@ -74,19 +74,12 @@ searchlist (ino_t inode, struct filegroup_s *fl)
     return searchlist (inode, fl->next);
 }
 
-int
-listlength (struct filegroup_s *f)
-{
-    if (f == NULL)
-	return 0;
-    else
-	return 1 + listlength (f->next);
-}
-
 void
 addtolist (char *filename, struct stat *sb)
 {
     struct filegroup_s *fl, *new;
+
+    ++filecount;
 
     if (sb->st_size == 0)
 	return;
@@ -94,6 +87,8 @@ addtolist (char *filename, struct stat *sb)
     if (fl == NULL)
     {
 	int f, size;
+
+	++inodecount;
 
 	size = MIN (sb->st_size, CMPSIZE);
 
@@ -182,14 +177,14 @@ showstatus (float stat)
     printf ("\r% 03.3f%% [", 100.0 * stat);
     blings = (int)(stat * 62.0);
 
-
+/*
     for (i = 0; i < blings; ++i)
 	printf ("=");
     printf (">");
     for (i = blings; i <= 62; ++i)
 	printf (" ");
     printf ("]");
-
+*/
     return;
 }
 
@@ -292,8 +287,7 @@ compagainst (struct filegroup_s *a)
 	    showstatus ((float)at / (float)count);
 
 	    size = MIN (MIN (a->size, b->size), 4096);
-
-	    if (memcmp (a->buf, b->buf, size))
+	    if (memcmp (a->buf, b->buf, size) == 0)
 	    {
 		struct filegroup_s *fg;
 
@@ -332,9 +326,11 @@ main (int argc, char **argv)
 	else if (sb.st_mode & S_IFREG && sb.st_size)
 	    addtolist (buf, &sb);
 	++i;
+	printf ("\rFiles: %d\tInodes: %d", filecount, inodecount);
     }
+    printf ("\n");
     closedir (d);
-    count = listlength (filelist);
+    count = inodecount;
     printf ("Dir read completed, %d inodes, ", count);
     count = (int)((float)count * (float)count / 2.0);
     printf ("estimating %d scans\n", count);
