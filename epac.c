@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.25 2003/12/27 17:52:14 erik Exp $
+ * $Id: epac.c,v 1.26 2003/12/27 18:06:35 erik Exp $
  */
 
 #include <stdio.h>
@@ -70,12 +70,21 @@ int
 dohelp (char *name)
 {
     doversion (name);
+/*
     printf ("Usage\n\
 \t%s [-hv] [-s] <dir>\n\
 \n\
  -C      \n\
  -r      Recursive operation\n\
  -s      Only do savings\n\
+ -h      Display this help screen\n\
+ -v      Display the version\n\
+\n", name);
+*/
+    printf ("Usage\n\
+\t%s [-hv] [-s] <dir>\n\
+\n\
+ -C      \n\
  -h      Display this help screen\n\
  -v      Display the version\n\
 \n", name);
