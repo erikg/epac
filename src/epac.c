@@ -1,7 +1,7 @@
 
 /*****************************************************************************
  * Erik's Partial Archive Collator                                           *
- * Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>                   *
+ * Copyright (C) 2002-2004 Erik Greenwald <erik@smluc.org>                   *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.5 2004/04/23 00:32:50 erik Exp $
+ * $Id: epac.c,v 1.6 2004/08/20 22:02:02 erik Exp $
  */
 
 #include <stdio.h>
@@ -55,14 +55,13 @@ unsigned int count = 0, inodecount = 0, filecount = 0, possiblematchcount =
     0, at = 0;
 unsigned int only_do_savings = 0, do_recursive = 0, verbose = 0;
 
-/* good for 2^64 bytes... a more elegant solution may be desired... */
 double reclaimed = 0.0;
 
 int
 doversion (char *name)
 {
     printf ("\
-%s (%s) Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>\n\
+%s (%s) Copyright (C) 2002-2004 Erik Greenwald <erik@smluc.org>\n\
 %s comes with ABSOLUTELY NO WARRANTY. Please read the GPL for details.\n\n", name, PACKAGE, VERSION);
     return 0;
 }
@@ -71,12 +70,6 @@ int
 dohelp (char *name)
 {
     doversion (name);
-
-    /*
-     * printf ("Usage\n\ \t%s [-hv] [-s] <dir>\n\ \n\ -C      \n\ -r
-     * Recursive operation\n\ -s      Only do savings\n\ -h      Display this
-     * help screen\n\ -v      Display the version\n\ \n", name);
-     */
     printf ("Usage\n\
 \t%s [-hv] [-C [-W <cols>]] <dir>\n\
 \n\
@@ -158,14 +151,10 @@ epac (int argc, char **argv)
 	closedir (d);
 	argv++;
     }
-    if (verbose)
-	printf ("\n");
     count = inodecount;
-    if (verbose)
-	printf ("Dir read completed, %d inodes, ", count);
     count = (int)((float)count * (float)count / 2.0);
     if (verbose)
-	printf ("estimating %d scans\n", count);
+	printf ("\nDir read completed, %d inodes, estimating %d scans\n", inodecount, count);
 
     if (filelist && filelist->next)
 	compagainst (filelist);
@@ -173,15 +162,14 @@ epac (int argc, char **argv)
 	printf ("uh?\n");
 
     if (verbose)
+    {
 	showstatus (1.0);
-    if (verbose)
-	printf ("\n");
-    if (verbose)
-	printf ("%d possiblematch calls, %.2f%% scans\n", possiblematchcount,
+	printf ("\n%d possiblematch calls, %.2f%% scans\n", possiblematchcount,
 	    100.0 * possiblematchcount / count);
-    if (verbose)
 	printf ("%.0f bytes (%0.2f k, %02.f m) recovered\n", reclaimed,
 	    reclaimed / 1024.0, reclaimed / (1024.0 * 1024.0));
+    }
+
     return 0;
 }
 
