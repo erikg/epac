@@ -1,7 +1,7 @@
 
 /*****************************************************************************
- * Erik's Partial Archive Collator
- * Copyright (C) 2002 Erik Greenwald <erik@smluc.org>                        *
+ * Erik's Partial Archive Collator                                           *
+ * Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>                   *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -9,7 +9,7 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger. 
+ * and hardlink to the larger.                                               *
  *                                                                           *
  * This program is free software; you can redistribute it and/or modify      * 
  * it under the terms of the GNU General Public License as published by      *
@@ -27,24 +27,17 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.h,v 1.3 2004/02/22 18:19:57 erik Exp $
+ * $Id: main.c,v 1.1 2004/02/22 18:19:51 erik Exp $
  */
 
-#ifndef EPAC_H
-#define EPAC_H
+#include <stdio.h>
+#include <stdlib.h>
 
-#define CMPSIZE 256
+#include "config.h"
 
-#define MIN(a,b) (a)<(b)?(a):(b)
-#define MAX(a,b) (a)>(b)?(a):(b)
-
-extern unsigned int count, inodecount, filecount, possiblematchcount, at;
-
-/* good for 2^64 bytes... a more elegant solution may be desired... */
-extern double reclaimed;
-
-extern unsigned int verbose;
-
-int epac(int argc, char **argv);
-
-#endif
+#include "epac.h"
+int
+main (int argc, char **argv)
+{
+    return epac(argc, argv);
+}

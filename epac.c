@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.26 2003/12/27 18:06:35 erik Exp $
+ * $Id: epac.c,v 1.27 2004/02/22 18:19:51 erik Exp $
  */
 
 #include <stdio.h>
@@ -92,7 +92,7 @@ dohelp (char *name)
 }
 
 int
-main (int argc, char **argv)
+epac (int argc, char **argv)
 {
     DIR *d;
     struct dirent *de;
