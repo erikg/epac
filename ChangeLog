@@ -1,0 +1,44 @@
+20050105:
+	* autosearch for /usr/local and /sw
+
+20040725:
+	* error reporting on bad relinking.
+
+20040423:
+	* added -W width flag to force screen width.
+
+20040411:
+	* use src subdir.
+	* print possible matches.
+	* handle different screen widths using $COLUMNS.
+
+20040303:
+	* Fixes for MacOSX.3
+
+20040222:
+	* initial testing stuff.
+	* initial doxygen.
+
+20031227:
+	* Release 0.3
+	* RPM stuff.
+	* Added linux support.
+
+20031226:
+	* Initial manpage
+	* split display stuff off
+	* use getopt
+
+20031225:
+	* Move to autoconf
+	* split list module off
+
+200300301:
+	* hash table optimization.
+
+20020812:
+	* Release 0.2
+
+20020805:
+	* Release 0.1
+
