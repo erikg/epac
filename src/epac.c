@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.2 2004/04/11 16:39:46 erik Exp $
+ * $Id: epac.c,v 1.3 2004/04/11 18:28:33 erik Exp $
  */
 
 #include <stdio.h>
@@ -197,6 +197,7 @@ epac_handle_match (struct filegroup_s *a, struct filegroup_s *b)
     {
 	char c[BUFSIZ];
 
+	printf("\n%s <-> %s\n", a->files->filename, b->files->filename);
 	while (1)
 	{
 	    printf ("\aCombine? y/n > ");
