@@ -27,14 +27,23 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.c,v 1.1 2003/02/17 21:38:22 erik Exp $
+ * $Id: dir.c,v 1.2 2003/02/17 21:45:22 erik Exp $
  */
+
+#include <sys/types.h>
+#include <dirent.h>
+
 
 #include "dir.h"
 #include "tree.h"
 
-tree_t dirspew(tree_t t, char *dir, do_recursive)
+tree_t *
+dirspew (tree_t * t, char *dir, int only_do_savings, int do_recursive)
 {
-	
-}
+	DIR *d;
 
+	d = opendir (d);
+	if (d == NULL)
+		return t;
+	closedir (d);
+}

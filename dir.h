@@ -27,10 +27,14 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.h,v 1.1 2003/02/17 21:38:22 erik Exp $
+ * $Id: dir.h,v 1.2 2003/02/17 21:45:22 erik Exp $
  */
+
+#ifndef __DIR_H_
+#define __DIR_H_
 
 #include "tree.h"
 
-tree_t *dirspew(tree_t *t, char *dir, int do_recursive);
+tree_t *dirspew (tree_t * t, char *dir, int only_do_savings, int do_recursive);
 
+#endif

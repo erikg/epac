@@ -27,15 +27,19 @@
  ****************************************************************************/
 
 /*
- * $Id: tree.h,v 1.2 2003/02/09 01:40:13 erik Exp $
+ * $Id: tree.h,v 1.3 2003/02/17 21:45:22 erik Exp $
  */
 
-typedef struct tree_s
-{
+#ifndef __TREE_H_
+#define __TREE_H_
+
+typedef struct tree_s {
 	void *data;
 	struct tree_s *left, *right;
 } tree_t;
 
-tree_t *tree_add(tree_t *tree, void *data, int (*cmp)(void *a,void *b));
-void *tree_search(tree_t *tree, void *data, int (*cmp)(void *a, void *b));
-void tree_traverse_213(tree_t *node, void (*func)(void *n));
+tree_t *tree_add (tree_t * tree, void *data, int (*cmp) (void *a, void *b));
+void *tree_search (tree_t * tree, void *data, int (*cmp) (void *a, void *b));
+void tree_traverse_213 (tree_t * node, void (*func) (void *n));
+
+#endif

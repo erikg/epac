@@ -27,13 +27,14 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.15 2003/02/17 21:39:26 erik Exp $
+ * $Id: epac.c,v 1.16 2003/02/17 21:45:22 erik Exp $
  */
 
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
+#include "dir.h"
 #include "tree.h"
 
 int
@@ -78,7 +79,7 @@ main (int argc, char **argv)
 		switch (c)
 		{
 		case 'h':
-			dohelp(argv[0]);
+			dohelp (argv[0]);
 			return EXIT_SUCCESS;
 		case 'v':
 			doversion (argv[0]);
@@ -98,15 +99,15 @@ main (int argc, char **argv)
 			return 1;
 		default:
 			printf ("Unknown error (option: %c)\n", c);
-			dohelp(argv[0]);
+			dohelp (argv[0]);
 			return 2;
 		}
 	argc -= optind;
 	argv += optind;
 
-	while(*argv)
+	while (*argv)
 	{
-		itree=dirspew(itree,argv,do_recursive); 
+		itree = dirspew (itree, *argv, only_do_savings, do_recursive);
 		++argv;
 	}
 
@@ -118,6 +119,5 @@ main (int argc, char **argv)
 
 	tree_traverse_213 (basedirs, print);
 
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
-
