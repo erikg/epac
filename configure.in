@@ -1,0 +1,11 @@
+dnl $Id: configure.in,v 1.1 2003/02/08 15:07:58 erik Exp $
+AC_INIT(epac.c)
+AM_INIT_AUTOMAKE(epac, 0.3)
+
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_ISC_POSIX
+AC_C_CONST
+AC_STDC_HEADERS
+
+AC_OUTPUT(Makefile)

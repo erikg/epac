@@ -27,85 +27,15 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.11 2003/02/08 15:07:58 erik Exp $
+ * $Id: tree.h,v 1.1 2003/02/08 15:07:58 erik Exp $
  */
 
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-#include "tree.h"
-
-int
-doversion ()
+typedef struct tree_s
 {
-  printf
-    ("\
-%s %s Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>\n\
-%s comes with ABSOLUTELY NO WARRANTY. Please read the GPL for details.\n\n",
-	PACKAGE, PACKAGE, VERSION);
-  return 0;
-}
+	void *data;
+	struct tree_s *left, *right;
+} tree_t;
 
-int
-dohelp (char *name)
-{
-  doversion (name);
-  printf ("Usage\n\
-\t%s [-hv] [-d <dir>] [-s]\n\
-\n\
- -s      Only do savings\n\
- -h      Display this help screen\n\
- -v      Display the version\n\
-\n", name, name);
-  return 0;
-}
+tree_t *tree_add(tree_t *tree, void *data, int (*cmp)(void *a,void *b));
+void *tree_search(tree_t *tree, void *data, int (*cmp)(void *a, void *b));
 
-int
-main (int argc, char **argv)
-{
-  int c, only_do_savings=0;
-  char *buf;
-
-  tree_t *basedirs = NULL;
-  while ((c = getopt (argc, argv, "hvd:s")) != -1)
-    switch (c)
-      {
-      case 'h':
-	return dohelp (argv[0]);
-      case 'v':
-	return doversion (argv[0]);
-      case 'd':
-	buf=optarg;
-	if(tree_search(basedirs, buf, strcmp)==NULL)
-		basedirs = tree_add(basedirs, buf, strcmp);
-      case 's':
-	only_do_savings=1;
-      case ':':
-	printf ("Option \"%s\" missing parameter\n", optarg);
-	return 1 + dohelp (argv[0]);
-      case '?':
-	printf ("Unknown option: %c\n", c);
-	return 1 + dohelp (argv[0]);
-      default:
-	printf ("Unknown error (option: %c)\n", c);
-	return 2;
-      }
-
-
-  if(only_do_savings)
-  {
-	  printf("not implemented yet\n");
-	  return 0;
-  }
-
-#if 0
-  for each dir
-    for each entry
-    	if inode new
-		read node
-		ins into itree
-		ins into dtree
-#endif
-  return EXIT_SUCCESS;
-}
