@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.4 2003/03/01 20:00:07 erik Exp $
+ * $Id: list.c,v 1.5 2003/03/02 17:10:54 erik Exp $
  */
 
 #include <stdio.h>
@@ -107,5 +107,6 @@ list_traverse (list_t * list, void (*func) (void *n))
 int
 list_length (list_t * list)
 {
-  return list->length;
+  return list ? list->length : 0;
+
 }
