@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.11 2003/02/08 15:07:58 erik Exp $
+ * $Id: epac.c,v 1.12 2003/02/08 16:20:12 erik Exp $
  */
 
 #include <stdlib.h>
@@ -64,11 +64,12 @@ dohelp (char *name)
 int
 main (int argc, char **argv)
 {
-  int c, only_do_savings=0;
-  char *buf;
+  int c, only_do_savings=0, do_recursive=0;
+  char *buf = NULL;
+  tree_t *itree = NULL, *dtree = NULL;
 
   tree_t *basedirs = NULL;
-  while ((c = getopt (argc, argv, "hvd:s")) != -1)
+  while ((c = getopt (argc, argv, "hvd:sr")) != -1)
     switch (c)
       {
       case 'h':
@@ -79,8 +80,13 @@ main (int argc, char **argv)
 	buf=optarg;
 	if(tree_search(basedirs, buf, strcmp)==NULL)
 		basedirs = tree_add(basedirs, buf, strcmp);
+	break;
       case 's':
 	only_do_savings=1;
+	break;
+      case 'r':
+	do_recursive=1;
+	break;
       case ':':
 	printf ("Option \"%s\" missing parameter\n", optarg);
 	return 1 + dohelp (argv[0]);
@@ -99,6 +105,8 @@ main (int argc, char **argv)
 	  return 0;
   }
 
+
+
 #if 0
   for each dir
     for each entry
@@ -109,3 +117,4 @@ main (int argc, char **argv)
 #endif
   return EXIT_SUCCESS;
 }
+
