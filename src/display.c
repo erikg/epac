@@ -27,10 +27,11 @@
  ****************************************************************************/
 
 /*
- * $Id: display.c,v 1.1 2004/04/11 15:06:24 erik Exp $
+ * $Id: display.c,v 1.2 2004/04/11 15:33:42 erik Exp $
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <unistd.h>
 #include "display.h"
@@ -54,8 +55,19 @@ showstatus (float stat)
     static int dirty = -1;
     static float last = -1.0;
     static char buf[1024] =
-	"\r  0.00% [                                                                   ] ";
+	"\r  0.00%%  [                                                                   ] ";
+    static int columns=-1;
     int flooble;
+
+    if(columns == -1)
+    {
+	char *COL;
+	COL = getenv("COLUMNS");
+	if(COL)
+	    columns = atoi(COL);
+	else
+	    columns = 80;
+    }
 
     if (fabs (stat - last) < .0001)
 	return;
@@ -63,7 +75,7 @@ showstatus (float stat)
     last = stat;
     sprintf (buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%0.02f%%",
 	100.0 * stat);
-    flooble = (int)(67.0 * stat);
+    flooble = (int)(columns-14 * stat);
     if (flooble > dirty)
     {
 	int i;
@@ -71,7 +83,7 @@ showstatus (float stat)
 	dirty = flooble;
 	for (i = 0; i < flooble; ++i)
 	    buf[i + 10] = '=';
-	write (STDOUT_FILENO, buf, 78);
+	write (STDOUT_FILENO, buf, columns-2);
     } else
 	write (STDOUT_FILENO, buf, 7);
     fflush (stdout);
