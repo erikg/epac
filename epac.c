@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.8 2002/12/12 04:34:59 erik Exp $
+ * $Id: epac.c,v 1.9 2002/12/12 20:35:20 erik Exp $
  */
 
 #include <stdio.h>
@@ -41,13 +41,8 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 
-	/*
-	 * how many bytes to store for 'fast' comparison. If this number
-	 * is too small, it will cause a lot of hard file comparisons. If
-	 * it's too large, it'll burn up memory. I suggest something between
-	 * 256 and 4096. This is the 'safe' default... 
-	 */
-#define CMPSIZE 4096
+
+#define CMPSIZE 256
 
 #define MIN(a,b) (a)<(b)?(a):(b)
 #define MAX(a,b) (a)>(b)?(a):(b)
@@ -55,7 +50,7 @@
 unsigned int count = 0, inodecount = 0, filecount = 0, possiblematchcount = 0, at = 0;
 
 /* good for 2^64 bytes... a more elegant solution may be desired... */
-unsigned long long int reclaimed = 0;
+double reclaimed = 0.0;
 
 struct filename_s {
     char *filename;
@@ -235,8 +230,8 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
 	b->prev->next = b->next;
     if (b->next)
 	b->next->prev = b->prev;
-    reclaimed += b->size;
-    printf ("Reclaimed %d bytes (%d bytes total)\n", b->size, reclaimed);
+    reclaimed += (double)b->size;
+    printf ("Reclaimed %d bytes (%.0ld bytes total (%.0ldk %.0ldm))\n", b->size, reclaimed,reclaimed/1024.0,reclaimed/(1024.0*1024.0));
     free (b);
     return fg;
 }
@@ -246,9 +241,7 @@ possiblematch (struct filegroup_s *a, struct filegroup_s *b)
 {
     static int size, fa, fb;
     static void *ba, *bb;
-printf("POssible match!\n");
-printfilenames(a->files);
-printfilenames(b->files);
+
     ++possiblematchcount;
     size = MIN (a->size, b->size);
     fa = open (a->files->filename, O_RDONLY);
@@ -366,7 +359,7 @@ main (int argc, char **argv)
     printf ("\n");
     printf ("%d possiblematch calls, %.2f%% scans\n", possiblematchcount,
 	100.0 * possiblematchcount / count);
-    printf ("%d bytes (%0.2f k, %02.f m) recovered\n", reclaimed,
-	(float)reclaimed / 1024.0, (float)reclaimed / (1024.0 * 1024.0));
+    printf ("%.0lf bytes (%0.2lf k, %02.lf m) recovered\n", reclaimed,
+	reclaimed / 1024.0, reclaimed / (1024.0 * 1024.0));
     return 0;
 }
