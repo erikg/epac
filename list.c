@@ -27,11 +27,16 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.8 2003/12/27 17:35:28 erik Exp $
+ * $Id: list.c,v 1.9 2003/12/27 17:52:14 erik Exp $
  */
 
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef __linux__
+# ifndef __USE_BSD
+#  define __USE_BSD
+# endif
+#endif
 #include <string.h>
 #include <sys/fcntl.h>
 #include <sys/types.h>

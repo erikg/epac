@@ -27,13 +27,21 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.24 2003/12/27 17:18:55 erik Exp $
+ * $Id: epac.c,v 1.25 2003/12/27 17:52:14 erik Exp $
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <dirent.h>
+
+#ifdef __linux__
+# ifndef __USE_BSD
+#  define __USE_BSD
+# endif
+#include <getopt.h>
+#include <sys/stat.h>
+#endif
 
 #include "config.h"
 
