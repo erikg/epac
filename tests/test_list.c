@@ -1,5 +1,5 @@
 /*
- * $Id: test_list.c,v 1.3 2004/04/11 14:43:32 erik Exp $
+ * $Id: test_list.c,v 1.4 2004/04/11 14:46:33 erik Exp $
  */
 
 #include <stdio.h>
@@ -70,19 +70,16 @@ START_TEST (test_list_search)
     snprintf (buf, BUFSIZ, "expected \"test_list.c\", but got \"%s\"\n",
 	d->files->filename);
     fail_unless (strcmp ("test_list.c", d->files->filename) == 0, buf);
-    printf("\n%d\n", d->inode);
 
     d = searchlist (sb[1].st_ino, filelist);
     snprintf (buf, BUFSIZ, "expected \"test_list.h\", but got \"%s\"\n",
 	d->files->filename);
     fail_unless (strcmp ("test_list.h", d->files->filename) == 0, buf);
-    printf("\n%d\n", d->inode);
 
     d = searchlist (sb[2].st_ino, filelist);
     snprintf (buf, BUFSIZ, "expected \"test_epac\", but got \"%s\"\n",
 	d->files->filename);
     fail_unless (strcmp ("test_epac", d->files->filename) == 0, buf);
-    printf("\n%d\n", d->inode);
 }
 END_TEST
 
