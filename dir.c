@@ -27,23 +27,63 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.c,v 1.2 2003/02/17 21:45:22 erik Exp $
+ * $Id: dir.c,v 1.3 2003/02/17 22:52:20 erik Exp $
  */
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 
+#define BUFSIZ 4096
 
 #include "dir.h"
 #include "tree.h"
 
 tree_t *
-dirspew (tree_t * t, char *dir, int only_do_savings, int do_recursive)
+dirspew (tree_t * itree, char *dir, int only_do_savings, int do_recursive)
 {
 	DIR *d;
+	struct dirent *de;
+	char buf[BUFSIZ];
 
-	d = opendir (d);
+	d = opendir (dir);
 	if (d == NULL)
-		return t;
+		return itree;
+
+	while ((de = readdir (d)) != NULL)
+	{
+		static struct stat sb;
+
+		snprintf (buf, BUFSIZ, "%s/%s", dir, de->d_name);
+
+		if (de->d_type == DT_DIR)
+		{
+				/* dont' care bout "." or "..", that'd be bad recursion */
+			if (de->d_name[0] == '.' && (de->d_name[1] == 0
+				|| (de->d_name[1] == '.' && de->d_name[2] == 0)))
+				continue;
+			if (do_recursive)
+				itree =
+				    dirspew (itree, buf, only_do_savings,
+				    do_recursive);
+		} else if (!stat (buf, &sb))
+		{
+			printf("%s\n", buf);
+/*
+__dev_t st_dev;
+ino_t st_ino;
+off_t st_size;
+*/
+		} else
+		{
+			printf
+			    ("Unable to stat something readdir showed me... %s\n",
+			    buf);
+			exit (-1);
+		}
+
+/*		itree=tree_add(	*/
+	}
+
 	closedir (d);
 }
