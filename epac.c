@@ -47,7 +47,8 @@
 #define MIN(a,b) (a)<(b)?(a):(b)
 #define MAX(a,b) (a)>(b)?(a):(b)
 
-int count = 0, inodecount = 0, filecount = 0, possiblematchcount = 0, at = 0, reclaimed = 0;
+int count = 0, inodecount = 0, filecount = 0, possiblematchcount = 0, at =
+    0, reclaimed = 0;
 
 struct filename_s {
     char *filename;
@@ -138,8 +139,8 @@ addtolist (char *filename, struct stat *sb)
 	    {
 		new->prev = f->prev;
 		new->next = f;
-		if(f->prev)
-			f->prev->next = new;
+		if (f->prev)
+		    f->prev->next = new;
 		f->prev = new;
 	    }
 	}
@@ -182,18 +183,19 @@ showstatus (float stat)
 	return;
 
     last = stat;
-    sprintf (buf + (stat>=1.0?1:stat>=.10?2:3), "%.02f%%", 100.0 * stat);
+    sprintf (buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%.02f%%",
+	100.0 * stat);
     flooble = (int)(67.0 * stat);
     if (flooble > dirty)
     {
 	int i;
 
 	dirty = flooble;
-	for (i=0; i < flooble; ++i)
-	    buf[i+10] = '=';
-        write(STDOUT_FILENO, buf, 78);
-    }else
-   	 write (STDOUT_FILENO, buf, 10);
+	for (i = 0; i < flooble; ++i)
+	    buf[i + 10] = '=';
+	write (STDOUT_FILENO, buf, 78);
+    } else
+	write (STDOUT_FILENO, buf, 10);
     fflush (stdout);
     return;
 }
@@ -351,9 +353,10 @@ main (int argc, char **argv)
 	compagainst (filelist);
     else
 	printf ("uh?\n");
-    showstatus(1.0);
+    showstatus (1.0);
     printf ("\n");
-    printf ("%d possiblematch calls, %.2f%% scans\n", possiblematchcount, 100.0*possiblematchcount/count);
+    printf ("%d possiblematch calls, %.2f%% scans\n", possiblematchcount,
+	100.0 * possiblematchcount / count);
     printf ("%d bytes (%0.2f k, %02.f m) recovered\n", reclaimed,
 	(float)reclaimed / 1024.0, (float)reclaimed / (1024.0 * 1024.0));
     return 0;

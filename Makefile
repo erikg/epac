@@ -7,7 +7,7 @@ GZ=${TAR}.gz
 ZIP=${DIST}.zip
 
 
-#CFLAGS+=-pg -ggdb
+CFLAGS+=-pg -ggdb
 
 epac: epac.o
 	${CC} ${CFLAGS} -o epac epac.o
