@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.9 2003/12/27 17:52:14 erik Exp $
+ * $Id: list.c,v 1.10 2004/02/22 15:25:41 erik Exp $
  */
 
 #include <stdio.h>
@@ -91,6 +91,7 @@ addnewnode (struct filegroup_s *filelist, char *filename, struct stat *sb)
 	printf ("Malloc error!!! %s:%d\n", __FILE__, __LINE__);
 	exit (-1);
     }
+    memset(new->buf, 0, size);
     f = open (filename, O_RDONLY);
     if (read (f, new->buf, size) != size)
     {
