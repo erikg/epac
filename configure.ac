@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.8 2004/03/03 14:08:51 erik Exp $
+dnl $Id: configure.ac,v 1.1 2004/04/11 13:51:55 erik Exp $
 
 AC_INIT
 AC_CONFIG_SRCDIR([epac.c])
