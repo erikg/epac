@@ -1,0 +1,72 @@
+.\" epac.1 man page for epac
+.\" http://math.smsu.edu/~erik/software.php?id=92
+.\" $Id: epac.1,v 1.2 2003/12/27 17:18:55 erik Exp $
+.\"===========================================================================
+.Dd August 5, 2002
+.Dt EPAC 1
+.\"===========================================================================
+.Sh NAME
+.Nm EPAC
+.Nd Reduce (partially) identical files to a single inode.
+.\"===========================================================================
+.Sh SYNOPSIS
+.B epac
+.\".Op Fl Crsvh
+.Op Fl Cvh
+.Ar dir1
+.Op Ar dir2...
+.\"===========================================================================
+.Sh DESCRIPTION
+Erik's Partial Archive Collator takes a directory as an argument, then walks
+through it looking for duplicate and partially duplicate files. If it finds
+exact duplicates, it deletes one and creates a hard link to the other,
+minimizing disk usage. If it finds a pair of files where the larger file
+contains the entire contents of the smaller file, it will prompts to combine
+them and create a hard link.
+.Pp
+.\"===========================================================================
+.Sh OPTIONS
+.Bl -tag -width
+.It Op Fl C
+Verbose
+.\".It Op Fl s
+.\"show only, don't collapse
+.\".It Op Fl r
+.\"Operate recursively
+.It Op Fl v
+Show version and exit.
+.It Op Fl h
+Show help and exit.
+.El
+.\"===========================================================================
+.Sh DIAGNOSTICS
+.Nm
+returns 0 on success and non-zero on failure. The help (-h) and version (-v)
+flags return 0. Operational errors return a negative value and interface
+(human) errors return a positive value.
+.Pp
+.Bl -tag -width 4n -offset indent -compact
+.It Sy -1
+malloc or read error
+.It Sy 0
+Success, -v, or -h
+.It Sy 1
+poorly defined option (missing mandatory argument, etc) or -?
+.It Sy 2
+unknown option
+.El
+.Pp
+.\"===========================================================================
+.Sh SEE ALSO
+.Xr ln 1 ,
+.Xr link 3
+.\"===========================================================================
+.Sh BUGS
+Other than a crappy manpage, 
+.Nm
+has no known bugs. Please report any to
+.An <erik@smluc.org>
+.\"===========================================================================
+.Sh AUTHOR
+.An Erik Greenwald <erik@smluc.org> <erik@math.smsu.edu>
+http://math.smsu.edu/~erik/software.php?id=92

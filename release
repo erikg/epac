@@ -1,1 +1,7 @@
 
+change to GNU autoconf/automake
+uses getopt
+'head&tail' checking
+inclusion of a man page
+split into multiple source files
+various bugfixes

@@ -27,108 +27,144 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.23 2003/04/10 18:59:24 erik Exp $
+ * $Id: epac.c,v 1.24 2003/12/27 17:18:55 erik Exp $
  */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
+#include <dirent.h>
 
-#include "cope.h"
-#include "dir.h"
-#include "hash.h"
+#include "config.h"
+
+#include "comp.h"
+#include "display.h"
+#include "epac.h"
 #include "list.h"
-#include "node.h"
+
+unsigned int count = 0, inodecount = 0, filecount = 0, possiblematchcount =
+    0, at = 0;
+unsigned int only_do_savings = 0, do_recursive = 0, verbose = 0;
+
+/* good for 2^64 bytes... a more elegant solution may be desired... */
+double reclaimed = 0.0;
 
 int
-doversion ()
+doversion (char *name)
 {
-	printf ("\
-%s %s Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>\n\
-%s comes with ABSOLUTELY NO WARRANTY. Please read the GPL for details.\n\n", PACKAGE, PACKAGE, VERSION);
-	return 0;
+    printf ("\
+%s (%s) Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>\n\
+%s comes with ABSOLUTELY NO WARRANTY. Please read the GPL for details.\n\n", name, PACKAGE, VERSION);
+    return 0;
 }
 
 int
 dohelp (char *name)
 {
-	doversion (name);
-	printf ("Usage\n\
+    doversion (name);
+    printf ("Usage\n\
 \t%s [-hv] [-s] <dir>\n\
 \n\
+ -C      \n\
+ -r      Recursive operation\n\
  -s      Only do savings\n\
  -h      Display this help screen\n\
  -v      Display the version\n\
-\n", name, name);
-	return 0;
-}
-
-void
-print (void *n)
-{
-	node_print_filenames((node_t *)n);
-}
-
-int magic(char *data)
-{
-	return *(unsigned short *)data;
+\n", name);
+    return 0;
 }
 
 int
 main (int argc, char **argv)
 {
-	int c, only_do_savings = 0, do_recursive = 0;
-	list_t *basedirs = NULL, **h;
-	hash_t *ihash = hash_spawn(1<<16,magic);
+    DIR *d;
+    struct dirent *de;
+    int i = 0, c;
+    char buf[BUFSIZ], *name = *argv;
 
-	while ((c = getopt (argc, argv, "hvsr")) != -1)
-		switch (c)
-		{
-		case 'h':
-			dohelp (argv[0]);
-			return EXIT_SUCCESS;
-		case 'v':
-			doversion (argv[0]);
-			return EXIT_SUCCESS;
-		case 's':
-			only_do_savings = 1;
-			break;
-		case 'r':
-			do_recursive = 1;
-			break;
-		case ':':
-			printf ("Option \"%s\" missing parameter\n", optarg);
-			dohelp (argv[0]);
-			return 1;
-		case '?':
-			dohelp (argv[0]);
-			return 1;
-		default:
-			printf ("Unknown error (option: %c)\n", c);
-			dohelp (argv[0]);
-			return 2;
-		}
-	argc -= optind;
-	argv += optind;
-
-	while (*argv)
+    while ((c = getopt (argc, argv, "Chv")) != -1)
+	switch (c)
 	{
-		dirspew (ihash, *argv, only_do_savings, do_recursive);
-		++argv;
+	case 'C':
+	    verbose = 1;
+	    break;
+	case 'h':
+	    dohelp (name);
+	    return EXIT_SUCCESS;
+	case 'v':
+	    doversion (name);
+	    return EXIT_SUCCESS;
+	case 's':	/* not yet */
+	    only_do_savings = 1;
+	    break;
+	case 'r':	/* not yet */
+	    do_recursive = 1;
+	    break;
+	case ':':
+	    printf ("Option \"%s\" missing parameter\n", optarg);
+	    dohelp (name);
+	    return 1;
+	case '?':
+	    dohelp (name);
+	    return 1;
+	default:
+	    printf ("Unknown error (option: %c)\n", c);
+	    dohelp (name);
+	    return 2;
 	}
-	printf("\n");
+    argc -= optind;
+    argv += optind;
+    if (argc <= 0)
+    {
+	dohelp (name);
+	return 2;
+    }
 
-	if (only_do_savings)
+    while (argc--)
+    {
+	d = opendir (*argv);
+	if (d == NULL)
+	    continue;
+	while ((de = readdir (d)) != NULL)
 	{
-		printf ("not implemented yet\n");
-		return EXIT_FAILURE;
+	    static struct stat sb;
+
+	    sprintf (buf, "%s/%s", *argv, de->d_name);
+	    if (stat (buf, &sb) == -1)
+		perror ("stat issue? :");
+	    else if (sb.st_mode & S_IFREG && sb.st_size)
+		addtolist (buf, &sb);
+	    if (verbose && !(i % 8))
+		printf ("\rFiles: %d\tInodes: %d", filecount, inodecount),
+		    fflush (stdout);
+	    ++i;
 	}
+	closedir (d);
+	argv++;
+    }
+    if (verbose)
+	printf ("\n");
+    count = inodecount;
+    if (verbose)
+	printf ("Dir read completed, %d inodes, ", count);
+    count = (int)((float)count * (float)count / 2.0);
+    if (verbose)
+	printf ("estimating %d scans\n", count);
 
-	h = ihash->table;
-	for(c=0;c<1<<16;++c)
-		if(list_length(h[c])>1)
-			cope_with(h[c]);
+    if (filelist && filelist->next)
+	compagainst (filelist);
+    else
+	printf ("uh?\n");
 
-	return EXIT_SUCCESS;
+    if (verbose)
+	showstatus (1.0);
+    if (verbose)
+	printf ("\n");
+    if (verbose)
+	printf ("%d possiblematch calls, %.2f%% scans\n", possiblematchcount,
+	    100.0 * possiblematchcount / count);
+    if (verbose)
+	printf ("%.0f bytes (%0.2f k, %02.f m) recovered\n", reclaimed,
+	    reclaimed / 1024.0, reclaimed / (1024.0 * 1024.0));
+    return 0;
 }

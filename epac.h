@@ -1,7 +1,7 @@
 
 /*****************************************************************************
- * Erik's Partial Archive Collator                                           *
- * Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>                   *
+ * Erik's Partial Archive Collator
+ * Copyright (C) 2002 Erik Greenwald <erik@smluc.org>                        *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -9,7 +9,7 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger.                                               *
+ * and hardlink to the larger. 
  *                                                                           *
  * This program is free software; you can redistribute it and/or modify      * 
  * it under the terms of the GNU General Public License as published by      *
@@ -27,30 +27,22 @@
  ****************************************************************************/
 
 /*
- * $Id: node.h,v 1.4 2003/03/01 18:38:00 erik Exp $
+ * $Id: epac.h,v 1.2 2003/12/27 17:18:55 erik Exp $
  */
 
-#ifndef __NODE_H_
-#define __NODE_H_
+#ifndef EPAC_H
+#define EPAC_H
 
-#include <sys/types.h>
-#include <sys/stat.h>
+#define CMPSIZE 256
 
-#include "tree.h"
+#define MIN(a,b) (a)<(b)?(a):(b)
+#define MAX(a,b) (a)>(b)?(a):(b)
 
-#define READSIZE 8
+extern unsigned int count, inodecount, filecount, possiblematchcount, at;
 
-typedef struct node_s
-{
-	tree_t *nametree;
-	ino_t ino;
-	off_t size;
-	/* __dev_t dev; */
-	unsigned int data[READSIZE];
-} node_t;
+/* good for 2^64 bytes... a more elegant solution may be desired... */
+extern double reclaimed;
 
-int ino_cmp(void *a, void *b);
-node_t *node_new(char *name, struct stat *sb);
-void node_print_filenames(node_t *n);
+extern unsigned int verbose;
 
 #endif

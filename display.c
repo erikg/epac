@@ -1,7 +1,7 @@
 
 /*****************************************************************************
- * Erik's Partial Archive Collator                                           *
- * Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>                   *
+ * Erik's Partial Archive Collator
+ * Copyright (C) 2002 Erik Greenwald <erik@smluc.org>                        *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -9,7 +9,7 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger.                                               *
+ * and hardlink to the larger. 
  *                                                                           *
  * This program is free software; you can redistribute it and/or modify      * 
  * it under the terms of the GNU General Public License as published by      *
@@ -27,13 +27,53 @@
  ****************************************************************************/
 
 /*
- * $Id: funcs.c,v 1.1 2003/02/18 22:46:46 erik Exp $
+ * $Id: display.c,v 1.2 2003/12/27 17:18:54 erik Exp $
  */
 
-#include "funcs.h"
+#include <stdio.h>
+#include <math.h>
+#include <unistd.h>
+#include "display.h"
 
-int eq_i(void *a, void *b)
+void
+printfilenames (struct filename_s *f)
 {
-	return (a==b)?0:a<b?-1:1;
+    if (f == NULL)
+    {
+	printf ("\n");
+	return;
+    }
+    printf ("%s ", f->filename);
+    printfilenames (f->next);
+    return;
 }
 
+void
+showstatus (float stat)
+{
+    static int dirty = -1;
+    static float last = -1.0;
+    static char buf[1024] =
+	"\r  0.00% [                                                                   ] ";
+    int flooble;
+
+    if (fabs (stat - last) < .0001)
+	return;
+
+    last = stat;
+    sprintf (buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%0.02f%%",
+	100.0 * stat);
+    flooble = (int)(67.0 * stat);
+    if (flooble > dirty)
+    {
+	int i;
+
+	dirty = flooble;
+	for (i = 0; i < flooble; ++i)
+	    buf[i + 10] = '=';
+	write (STDOUT_FILENO, buf, 78);
+    } else
+	write (STDOUT_FILENO, buf, 7);
+    fflush (stdout);
+    return;
+}

@@ -1,7 +1,7 @@
 
 /*****************************************************************************
- * Erik's Partial Archive Collator                                           *
- * Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>                   *
+ * Erik's Partial Archive Collator
+ * Copyright (C) 2002 Erik Greenwald <erik@smluc.org>                        *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -9,7 +9,7 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger.                                               *
+ * and hardlink to the larger. 
  *                                                                           *
  * This program is free software; you can redistribute it and/or modify      * 
  * it under the terms of the GNU General Public License as published by      *
@@ -27,12 +27,17 @@
  ****************************************************************************/
 
 /*
- * $Id: funcs.h,v 1.1 2003/02/18 22:46:46 erik Exp $
+ * $Id: comp.h,v 1.2 2003/12/27 17:18:54 erik Exp $
  */
 
-#ifndef __FUNCS_H_
-#define __FUNCS_H_
+#ifndef COMP_H
+#define COMP_H
 
-int eq_i(void *a, void *b);
+#include "list.h"
+
+struct filegroup_s *combine (struct filegroup_s *a, struct filegroup_s *b);
+struct filegroup_s *possiblematch (struct filegroup_s *a,
+    struct filegroup_s *b);
+void compagainst (struct filegroup_s *a);
 
 #endif

@@ -1,7 +1,7 @@
 
 /*****************************************************************************
- * Erik's Partial Archive Collator                                           *
- * Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>                   *
+ * Erik's Partial Archive Collator
+ * Copyright (C) 2002 Erik Greenwald <erik@smluc.org>                        *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -9,7 +9,7 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger.                                               *
+ * and hardlink to the larger. 
  *                                                                           *
  * This program is free software; you can redistribute it and/or modify      * 
  * it under the terms of the GNU General Public License as published by      *
@@ -27,88 +27,98 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.6 2003/04/10 18:59:24 erik Exp $
+ * $Id: list.c,v 1.7 2003/12/27 17:18:55 erik Exp $
  */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/fcntl.h>
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <unistd.h>
+
+
+#include "epac.h"
 #include "list.h"
 
-list_t *
-list_add_at_head (list_t * list, void *data)
-{
-  list_t *l;
-  l = (list_t *) malloc (sizeof (list_t));
-  l->data = data;
-  l->prev = NULL;
-  if (list)
-    {
-      list->prev = l;
-      l->next = list;
-      l->length = list->length + 1;
-    }
-  else
-    {
-      l->next = NULL;
-      l->length = 1;
-    }
-  return l;
-}
+struct filegroup_s *filelist = NULL;
 
-list_t *
-list_add_sorted (list_t * list, void *data, int (*cmp) (void *a, void *b))
+struct filegroup_s *
+searchlist (ino_t inode, struct filegroup_s *fl)
 {
-  if (list == NULL)
-    {
-      list_t *t = (list_t *) malloc (sizeof (list_t));
-
-      t->data = data;
-      t->prev = t->next = NULL;
-      return t;
-    }
-#if 0
-  switch (scrunch (cmp (list->data, data)))
-    {
-    case -1:
-      list->left = list_add (list->left, data, cmp);
-      break;
-    case 0:
-      /* ignore duplicates? */
-      break;
-    case 1:
-      list->right = list_add (list->right, data, cmp);
-      break;
-    }
-#endif
-  return list;
-}
-
-list_t *
-list_search (list_t * list, void *data, int (*cmp) (void *a, void *b))
-{
-  if (list == NULL)
-    return NULL;
-  if (cmp (list->data, data) == 0)
-    return list;
-  return list_search (list->next, data, cmp);
+    /*
+     * if the compile doesn't short circuit the || like it should, this will cause a segfault or worse 
+     */
+    return fl == NULL
+	|| fl->inode == inode ? fl : searchlist (inode, fl->next);
 }
 
 void
-list_traverse (list_t * list, void (*func) (void *n))
+addfilename (struct filegroup_s *fl, char *filename)
 {
-  if (list == NULL)
+    struct filename_s *f;
+
+    f = (struct filename_s *)malloc (sizeof (struct filename_s));
+    memset (f, NULL, sizeof (struct filename_s));
+    f->filename = strdup (filename);
+    f->next = fl->files;
+    fl->files = f;
+}
+
+struct filegroup_s *
+addnewnode (struct filegroup_s *filelist, char *filename, struct stat *sb)
+{
+    int f, size;
+    struct filegroup_s *new;
+
+    ++inodecount;
+
+    size = MIN (sb->st_size, CMPSIZE);
+
+    new = (struct filegroup_s *)malloc (sizeof (struct filegroup_s));
+    memset (new, NULL, sizeof (struct filegroup_s));
+    new->inode = sb->st_ino;
+    addfilename (new, filename);
+    new->size = sb->st_size;
+    if ((new->buf = (void *)malloc (size)) == 0)
+    {
+	printf ("Malloc error!!! %s:%d\n", __FILE__, __LINE__);
+	exit (-1);
+    }
+    f = open (filename, O_RDONLY);
+    if (read (f, new->buf, size) != size)
+    {
+	printf ("Read error!!! %s:%d\n", __FILE__, __LINE__);
+	exit (-1);
+    }
+    close (f);
+
+    new->next = filelist;
+    if (filelist)
+	filelist->prev = new;
+    return new;
+}
+
+void
+addtolist (char *filename, struct stat *sb)
+{
+    struct filegroup_s *fl;
+
+    ++filecount;
+
+    if (sb->st_size == 0)
+	return;
+    fl = searchlist (sb->st_ino, filelist);
+    if (fl == NULL)
+	filelist = addnewnode (filelist, filename, sb);
+    else			/* it's already in the list, just add this file name to the inode entry */
+	addfilename (fl, filename);
     return;
-  func (list->data);
-  if (list->next)
-    list_traverse (list->next, func);
-  return;
 }
 
 int
-list_length (list_t * list)
+listlength (struct filegroup_s *f)
 {
-  return list ? list->length : 0;
-
+    return f == NULL ? 0 : 1 + listlength (f->next);
 }
-
-

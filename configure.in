@@ -1,11 +1,13 @@
-dnl $Id: configure.in,v 1.1 2003/02/08 15:07:58 erik Exp $
+dnl $Id: configure.in,v 1.2 2003/12/27 17:18:54 erik Exp $
+
 AC_INIT(epac.c)
+AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(epac, 0.3)
 
 AC_PROG_CC
 AC_PROG_INSTALL
-AC_ISC_POSIX
-AC_C_CONST
-AC_STDC_HEADERS
+
+AC_CHECK_HEADERS(ctype.h dirent.h fcntl.h math.h stdio.h stdlib.h string.h sys/fcntl.h sys/mman.h sys/stat.h sys/types.h sys/uio.h unistd.h,,AC_ERROR(Missing necessary headers!))
+
 
 AC_OUTPUT(Makefile)

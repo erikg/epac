@@ -1,7 +1,7 @@
 
 /*****************************************************************************
- * Erik's Partial Archive Collator                                           *
- * Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>                   *
+ * Erik's Partial Archive Collator
+ * Copyright (C) 2002 Erik Greenwald <erik@smluc.org>                        *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -9,7 +9,7 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger.                                               *
+ * and hardlink to the larger. 
  *                                                                           *
  * This program is free software; you can redistribute it and/or modify      * 
  * it under the terms of the GNU General Public License as published by      *
@@ -27,25 +27,33 @@
  ****************************************************************************/
 
 /*
- * $Id: list.h,v 1.4 2003/03/01 20:00:07 erik Exp $
+ * $Id: list.h,v 1.5 2003/12/27 17:18:55 erik Exp $
  */
 
-#ifndef __LIST_H_
-#define __LIST_H_
+#ifndef LIST_H
+#define LIST_H
 
-typedef struct list_s
-{
-  void *data;
-  int length;
-  struct list_s *prev, *next;
-}
-list_t;
+#include <sys/types.h>
+#include <sys/stat.h>
 
-list_t *list_add (list_t * list, void *data, int (*cmp) (void *a, void *b));
-list_t *list_search (list_t * list, void *data,
-		     int (*cmp) (void *a, void *b));
-void list_traverse (list_t * node, void (*func) (void *n));
-list_t *list_sort (list_t * list, int (*cmp) (void *a, void *b));
-int list_length (list_t * list);
+struct filename_s {
+    char *filename;
+    struct filename_s *next;
+};
+
+struct filegroup_s {
+    unsigned int inode;
+    struct filename_s *files;
+    void *buf;
+    unsigned int size;
+    struct filegroup_s *prev;
+    struct filegroup_s *next;
+};
+
+extern struct filegroup_s *filelist;
+
+struct filegroup_s *searchlist (ino_t inode, struct filegroup_s *fl);
+void addtolist (char *filename, struct stat *sb);
+int listlength (struct filegroup_s *filelist);
 
 #endif
