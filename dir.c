@@ -27,14 +27,13 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.c,v 1.6 2003/02/19 00:39:24 erik Exp $
+ * $Id: dir.c,v 1.7 2003/02/20 14:19:47 erik Exp $
  */
 
+#include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
-
-#define BUFSIZ 4096
 
 #include "dir.h"
 #include "tree.h"

@@ -27,9 +27,10 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.16 2003/02/17 21:45:22 erik Exp $
+ * $Id: epac.c,v 1.17 2003/02/20 14:19:47 erik Exp $
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -70,8 +71,10 @@ int
 main (int argc, char **argv)
 {
 	int c, only_do_savings = 0, do_recursive = 0;
-	char *buf = NULL;
-	tree_t *itree = NULL, *dtree = NULL;
+	tree_t *itree = NULL;
+/*
+	tree_t *dtree = NULL;
+*/
 
 	tree_t *basedirs = NULL;
 

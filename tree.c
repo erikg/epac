@@ -27,10 +27,11 @@
  ****************************************************************************/
 
 /*
- * $Id: tree.c,v 1.4 2003/02/19 00:40:31 erik Exp $
+ * $Id: tree.c,v 1.5 2003/02/20 14:19:47 erik Exp $
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "tree.h"
 
 int
@@ -63,8 +64,7 @@ tree_add (tree_t * tree, void *data, int (*cmp) (void *a, void *b))
 		tree->left = tree_add (tree->left, data, cmp);
 		break;
 	case 0:
-		printf ("Whoa, it exists alread!\n");
-		printf ("%s\n", 
+		/* ignore duplicates? */
 		break;
 	case 1:
 		tree->right = tree_add (tree->right, data, cmp);
