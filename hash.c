@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: hash.c,v 1.2 2003/03/01 19:17:02 erik Exp $
+ * $Id: hash.c,v 1.3 2003/03/02 17:11:14 erik Exp $
  */
 
 #include <stdio.h>
@@ -43,6 +43,7 @@ hash_spawn (int width, int (*func) (void *))
   h->width = width;
   h->func = func;
   h->table = malloc (width * sizeof (void *));
+  memset (h->table, 0, width * sizeof (void *));
   return h;
 }
 
