@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.5 2003/03/02 17:10:54 erik Exp $
+ * $Id: list.c,v 1.6 2003/04/10 18:59:24 erik Exp $
  */
 
 #include <stdio.h>
@@ -110,3 +110,5 @@ list_length (list_t * list)
   return list ? list->length : 0;
 
 }
+
+

@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.22 2003/03/02 17:14:11 erik Exp $
+ * $Id: epac.c,v 1.23 2003/04/10 18:59:24 erik Exp $
  */
 
 #include <stdio.h>
@@ -35,6 +35,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "cope.h"
 #include "dir.h"
 #include "hash.h"
 #include "list.h"
@@ -78,7 +79,7 @@ int
 main (int argc, char **argv)
 {
 	int c, only_do_savings = 0, do_recursive = 0;
-	list_t *basedirs = NULL;
+	list_t *basedirs = NULL, **h;
 	hash_t *ihash = hash_spawn(1<<16,magic);
 
 	while ((c = getopt (argc, argv, "hvsr")) != -1)
@@ -116,28 +117,18 @@ main (int argc, char **argv)
 		dirspew (ihash, *argv, only_do_savings, do_recursive);
 		++argv;
 	}
-	/*
 	printf("\n");
 
-	*/
 	if (only_do_savings)
 	{
 		printf ("not implemented yet\n");
-		return 0;
+		return EXIT_FAILURE;
 	}
 
-	/*
-	list_traverse (ihash, print);
-	*/
-#if 1
-	{
-		int i;
-		list_t **h = ihash->table;
-		for(i=0;i<1<<16;++i)
-		{
-			printf("%d\n", list_length(h[i]));
-		}
-	}
-#endif
+	h = ihash->table;
+	for(c=0;c<1<<16;++c)
+		if(list_length(h[c])>1)
+			cope_with(h[c]);
+
 	return EXIT_SUCCESS;
 }

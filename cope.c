@@ -27,6 +27,14 @@
  ****************************************************************************/
 
 /*
- * $Id: cope.c,v 1.1 2003/04/10 18:12:41 erik Exp $
+ * $Id: cope.c,v 1.2 2003/04/10 18:59:24 erik Exp $
  */
+
+#include <cope.h>
+
+void cope_with(list_t *l)
+{
+	printf("%d\n",list_length(l));
+	return;
+}
 
