@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.c,v 1.1 2004/04/11 15:06:24 erik Exp $
+ * $Id: comp.c,v 1.2 2004/04/11 16:39:46 erik Exp $
  */
 
 #include <stdio.h>
@@ -59,7 +59,9 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
     struct filename_s *fn;
     struct filename_s *blah;
 
-	/* make a the larger of the two, so b must be reduced */
+    /*
+     * make a the larger of the two, so b must be reduced 
+     */
     if (b->size > a->size)
     {
 	struct filegroup_s *tmp;
@@ -117,31 +119,8 @@ possiblematch (struct filegroup_s *a, struct filegroup_s *b)
 	perror ("bb failed");
 
     if (compare (ba, bb, size, shortsize) == 0)
-    {
-	printf ("\nA match!\n");
-	printf ("%d ", a->size);
-	printfilenames (a->files);
-	printf ("%d ", b->size);
-	printfilenames (b->files);
-	if (a->size == b->size)
-	    b = combine (a, b);
-	else
-	{
-	    char c[BUFSIZ];
+	epac_handle_match (a, b);
 
-	    while (1)
-	    {
-		printf ("\aCombine? y/n > ");
-		scanf ("%s", c);
-		if (tolower (*c) == 'y')
-		{
-		    b = combine (a, b);
-		    break;
-		} else if (tolower (*c) == 'n')
-		    break;
-	    }
-	}
-    }
     munmap (ba, size);
     munmap (bb, size);
     close (fa);

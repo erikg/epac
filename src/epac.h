@@ -1,6 +1,6 @@
 
 /*****************************************************************************
- * Erik's Partial Archive Collator
+ * Erik's Partial Archive Collator                                           *
  * Copyright (C) 2002 Erik Greenwald <erik@smluc.org>                        *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
@@ -9,7 +9,7 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger. 
+ * and hardlink to the larger.                                               *
  *                                                                           *
  * This program is free software; you can redistribute it and/or modify      * 
  * it under the terms of the GNU General Public License as published by      *
@@ -27,11 +27,13 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.h,v 1.1 2004/04/11 15:06:24 erik Exp $
+ * $Id: epac.h,v 1.2 2004/04/11 16:39:46 erik Exp $
  */
 
 #ifndef EPAC_H
 #define EPAC_H
+
+#include "list.h"
 
 #define CMPSIZE 256
 
@@ -45,6 +47,8 @@ extern double reclaimed;
 
 extern unsigned int verbose;
 
-int epac(int argc, char **argv);
+int epac (int argc, char **argv);
+
+void epac_handle_match (struct filegroup_s *a, struct filegroup_s *b);
 
 #endif

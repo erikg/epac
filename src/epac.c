@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.1 2004/04/11 15:06:24 erik Exp $
+ * $Id: epac.c,v 1.2 2004/04/11 16:39:46 erik Exp $
  */
 
 #include <stdio.h>
@@ -70,6 +70,7 @@ int
 dohelp (char *name)
 {
     doversion (name);
+
 /*
     printf ("Usage\n\
 \t%s [-hv] [-s] <dir>\n\
@@ -111,10 +112,10 @@ epac (int argc, char **argv)
 	case 'v':
 	    doversion (name);
 	    return EXIT_SUCCESS;
-	case 's':	/* not yet */
+	case 's':		/* not yet */
 	    only_do_savings = 1;
 	    break;
-	case 'r':	/* not yet */
+	case 'r':		/* not yet */
 	    do_recursive = 1;
 	    break;
 	case ':':
@@ -184,4 +185,28 @@ epac (int argc, char **argv)
 	printf ("%.0f bytes (%0.2f k, %02.f m) recovered\n", reclaimed,
 	    reclaimed / 1024.0, reclaimed / (1024.0 * 1024.0));
     return 0;
+}
+
+
+void
+epac_handle_match (struct filegroup_s *a, struct filegroup_s *b)
+{
+    if (a->size == b->size)
+	b = combine (a, b);
+    else
+    {
+	char c[BUFSIZ];
+
+	while (1)
+	{
+	    printf ("\aCombine? y/n > ");
+	    scanf ("%s", c);
+	    if (tolower (*c) == 'y')
+	    {
+		b = combine (a, b);
+		break;
+	    } else if (tolower (*c) == 'n')
+		break;
+	}
+    }
 }
