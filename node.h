@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: node.h,v 1.1 2003/02/18 22:46:46 erik Exp $
+ * $Id: node.h,v 1.2 2003/02/18 23:00:59 erik Exp $
  */
 
 #ifndef __NODE_H_
@@ -36,9 +36,14 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "tree.h"
+
 typedef struct node_s
 {
+	tree_t *nametree;
 	ino_t ino;
+	off_t size;
+	/* __dev_t dev; */
 } node_t;
 
 int ino_cmp(void *a, void *b);
