@@ -27,13 +27,13 @@
  ****************************************************************************/
 
 /*
- * $Id: cope.h,v 1.2 2003/04/10 18:59:24 erik Exp $
+ * $Id: cope.h,v 1.3 2004/02/22 18:20:12 erik Exp $
  */
 
 #ifndef __COPE_H_
 #define __COPE_H_
 
-#include <list.h>
+#include "list.h"
 
 void cope_with(list_t *);
 
