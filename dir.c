@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.c,v 1.3 2003/02/17 22:52:20 erik Exp $
+ * $Id: dir.c,v 1.4 2003/02/18 22:23:03 erik Exp $
  */
 
 #include <sys/types.h>
@@ -38,6 +38,7 @@
 
 #include "dir.h"
 #include "tree.h"
+#include "funcs.h"
 
 tree_t *
 dirspew (tree_t * itree, char *dir, int only_do_savings, int do_recursive)
@@ -68,6 +69,8 @@ dirspew (tree_t * itree, char *dir, int only_do_savings, int do_recursive)
 				    do_recursive);
 		} else if (!stat (buf, &sb))
 		{
+			tree_t *node;
+			node = tree_search(itree, sb.st_ino, eq_i);
 			printf("%s\n", buf);
 /*
 __dev_t st_dev;
