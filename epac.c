@@ -48,8 +48,10 @@
 #define MIN(a,b) (a)<(b)?(a):(b)
 #define MAX(a,b) (a)>(b)?(a):(b)
 
-int count = 0, inodecount = 0, filecount = 0, possiblematchcount = 0, at =
-    0, reclaimed = 0;
+unsigned int count = 0, inodecount = 0, filecount = 0, possiblematchcount = 0, at = 0;
+
+/* good for 2^64 bytes... a more elegant solution may be desired... */
+unsigned long long int reclaimed = 0;
 
 struct filename_s {
     char *filename;
