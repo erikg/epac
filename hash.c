@@ -27,102 +27,35 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.21 2003/03/01 19:15:01 erik Exp $
+ * $Id: hash.c,v 1.1 2003/03/01 19:15:01 erik Exp $
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-#include "dir.h"
-#include "node.h"
-#include "list.h"
-
-int
-doversion ()
+typedef struct hash_s
 {
-	printf ("\
-%s %s Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>\n\
-%s comes with ABSOLUTELY NO WARRANTY. Please read the GPL for details.\n\n", PACKAGE, PACKAGE, VERSION);
-	return 0;
+  int (*func) (void *);
+  int width;
+  void *table;
+}
+hash_t;
+
+hash_t *
+hash_spawn (int width, int (*func) (void *))
+{
+  hash_t *h = (hash_t *) malloc (sizeof (hash_t));
+  h->width = width;
+  h->func = func;
+  h->table = malloc (width * sizeof (void *));
+  return h;
 }
 
-int
-dohelp (char *name)
+void *
+hash_lookup (hash_t * hash, void *data)
 {
-	doversion (name);
-	printf ("Usage\n\
-\t%s [-hv] [-s] <dir>\n\
-\n\
- -s      Only do savings\n\
- -h      Display this help screen\n\
- -v      Display the version\n\
-\n", name, name);
-	return 0;
-}
-
-void
-print (void *n)
-{
-	node_print_filenames((node_t *)n);
-}
-
-int
-main (int argc, char **argv)
-{
-	int c, only_do_savings = 0, do_recursive = 0;
-	list_t *ilist = NULL;
-/*
-	list_t *dlist = NULL;
-*/
-
-	list_t *basedirs = NULL;
-
-	while ((c = getopt (argc, argv, "hvsr")) != -1)
-		switch (c)
-		{
-		case 'h':
-			dohelp (argv[0]);
-			return EXIT_SUCCESS;
-		case 'v':
-			doversion (argv[0]);
-			return EXIT_SUCCESS;
-		case 's':
-			only_do_savings = 1;
-			break;
-		case 'r':
-			do_recursive = 1;
-			break;
-		case ':':
-			printf ("Option \"%s\" missing parameter\n", optarg);
-			dohelp (argv[0]);
-			return 1;
-		case '?':
-			dohelp (argv[0]);
-			return 1;
-		default:
-			printf ("Unknown error (option: %c)\n", c);
-			dohelp (argv[0]);
-			return 2;
-		}
-	argc -= optind;
-	argv += optind;
-
-	while (*argv)
-	{
-		ilist = dirspew (ilist, *argv, only_do_savings, do_recursive);
-		++argv;
-	}
-	printf("\n");
-
-	if (only_do_savings)
-	{
-		printf ("not implemented yet\n");
-		return 0;
-	}
-
-	list_traverse (ilist, print);
-
-	return EXIT_SUCCESS;
+  int i;
+  i = hash->func (data);
+  if (i > width || i < 0)
+    printf ("Bad hash!\n");
+  else
+    return &hash->table[i];
+  return NULL;
 }

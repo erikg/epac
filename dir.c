@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.c,v 1.8 2003/03/01 18:38:26 erik Exp $
+ * $Id: dir.c,v 1.9 2003/03/01 19:15:01 erik Exp $
  */
 
 #include <stdio.h>
@@ -78,7 +78,6 @@ dirspew (list_t * ilist, char *dir, int only_do_savings, int do_recursive)
 			printf("%d\r", count);
 		}
 	}
-	printf("\n");
 
 	closedir (d);
 	return ilist;
