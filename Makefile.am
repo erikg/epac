@@ -1,6 +1,6 @@
-# $Id: Makefile.am,v 1.13 2004/02/22 18:49:21 erik Exp $
+# $Id: Makefile.am,v 1.14 2004/03/03 14:08:51 erik Exp $
 
-SUBDIRS = tests
+SUBDIRS = @TEST@
 
 bin_PROGRAMS = epac
 epac_SOURCES = comp.c display.c epac.c list.c main.c
@@ -36,4 +36,5 @@ clean-local:
 	rm -rf doxygen refman.ps refman.pdf
 
 test:
-	(cd tests && make test)
+	(cd test && make test)
+

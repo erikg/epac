@@ -27,15 +27,11 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.1 2004/02/22 18:19:51 erik Exp $
+ * $Id: main.c,v 1.2 2004/03/03 14:08:51 erik Exp $
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "config.h"
-
 #include "epac.h"
+
 int
 main (int argc, char **argv)
 {

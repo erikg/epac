@@ -1,14 +1,15 @@
-dnl $Id: configure.in,v 1.7 2004/02/22 18:23:30 erik Exp $
+dnl $Id: configure.in,v 1.8 2004/03/03 14:08:51 erik Exp $
 
-AC_INIT(epac.c)
-AM_CONFIG_HEADER(config.h)
+AC_INIT
+AC_CONFIG_SRCDIR([epac.c])
+AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE(epac, 0.4)
 
 AC_PROG_CC
 AC_PROG_INSTALL
 
-AC_CHECK_HEADERS(ctype.h dirent.h fcntl.h math.h stdio.h stdlib.h string.h sys/fcntl.h sys/mman.h sys/stat.h sys/types.h sys/uio.h unistd.h,,AC_ERROR(Missing necessary headers!))
-AC_SEARCH_LIBS(fabs,m,,AC_ERROR(needs fabs!))
+AC_CHECK_HEADERS(ctype.h dirent.h fcntl.h math.h stdio.h stdlib.h string.h sys/fcntl.h sys/mman.h sys/stat.h sys/types.h sys/uio.h unistd.h,,AC_MSG_ERROR([Missing necessary headers!]))
+AC_SEARCH_LIBS(fabs,m,,AC_MSG_ERROR([needs fabs!]))
 
 COVERAGE_CFLAGS=
 AM_PATH_CHECK(,[
@@ -20,4 +21,5 @@ AC_SUBST(CHECK_LIBS)
 AC_SUBST(TEST)
 AC_SUBST(COVERAGE_CFLAGS)
 
-AC_OUTPUT(Makefile epac.spec doxygen.conf tests/Makefile)
+AC_CONFIG_FILES([Makefile epac.spec doxygen.conf test/Makefile])
+AC_OUTPUT
