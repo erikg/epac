@@ -21,7 +21,7 @@ clean:
 dist:
 	rm -rf ${DIST}
 	mkdir ${DIST}
-	cp Makefile epac.c LICENSE README ${DIST}/
+	cp Makefile epac.c COPYING README ${DIST}/
 	chmod 755 ${DIST}
 	chmod 644 ${DIST}/*
 	tar cvf ${TAR} ${DIST}
