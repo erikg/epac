@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: tree.c,v 1.6 2003/02/22 17:08:46 erik Exp $
+ * $Id: tree.c,v 1.7 2003/03/01 18:37:34 erik Exp $
  */
 
 #include <stdio.h>
@@ -42,7 +42,7 @@ scrunch (int x)
 	if (x < 0)
 		return -1;
 	if (x > 0)
-		return -1;
+		return 1;
 	printf ("wtf???\n");
 	exit (-1);
 }
