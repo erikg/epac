@@ -27,12 +27,15 @@
  ****************************************************************************/
 
 /*
- * $Id: node.c,v 1.5 2003/02/22 17:08:46 erik Exp $
+ * $Id: node.c,v 1.6 2003/03/01 18:38:00 erik Exp $
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "node.h"
 #include "tree.h"
@@ -46,16 +49,23 @@ int ino_cmp(void *_a, void *_b)
 
 node_t *node_new(char *name, struct stat *sb)
 {
+	int fd;
 	node_t *n = (node_t *)malloc(sizeof(node_t));
 	if(n==NULL)
 	{
 		perror("node_new: ");
-	/*	perror(__FILE__ ":" __LINE__ ":" __FUNCTION__ ": ");*/
 		exit(-1);
 	}
+	fd = open(name,O_RDONLY);
+	if(fd==-1){
+		free(n);
+		return NULL;
+	}
 	memset(n, 0, sizeof(node_t));
+	read(fd, n->data, READSIZE*sizeof(int));
+	close(fd);
 
-	n->nametree = tree_add(NULL, strdup(name), strcmp);
+	n->nametree = tree_add(NULL, (void *)strdup(name), strcmp);
 	n->size = sb->st_size;
 	n->ino = sb->st_ino;
 	/*

@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: node.h,v 1.3 2003/02/20 18:28:31 erik Exp $
+ * $Id: node.h,v 1.4 2003/03/01 18:38:00 erik Exp $
  */
 
 #ifndef __NODE_H_
@@ -38,12 +38,15 @@
 
 #include "tree.h"
 
+#define READSIZE 8
+
 typedef struct node_s
 {
 	tree_t *nametree;
 	ino_t ino;
 	off_t size;
 	/* __dev_t dev; */
+	unsigned int data[READSIZE];
 } node_t;
 
 int ino_cmp(void *a, void *b);
