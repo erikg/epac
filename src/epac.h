@@ -1,7 +1,7 @@
 
 /*****************************************************************************
- * Erik's Partial Archive Collator                                           *
- * Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>                   *
+ * Erik's Partial Archive Collator
+ * Copyright (C) 2002 Erik Greenwald <erik@smluc.org>                        *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -9,7 +9,7 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger.                                               *
+ * and hardlink to the larger. 
  *                                                                           *
  * This program is free software; you can redistribute it and/or modify      * 
  * it under the terms of the GNU General Public License as published by      *
@@ -27,69 +27,24 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.c,v 1.12 2003/04/10 18:59:24 erik Exp $
+ * $Id: epac.h,v 1.1 2004/04/11 15:06:24 erik Exp $
  */
 
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
+#ifndef EPAC_H
+#define EPAC_H
 
-#include "dir.h"
-#include "list.h"
-#include "funcs.h"
-#include "node.h"
-#include "hash.h"
+#define CMPSIZE 256
 
-static long long int count = 0, read;
+#define MIN(a,b) (a)<(b)?(a):(b)
+#define MAX(a,b) (a)>(b)?(a):(b)
 
-void
-dirspew (hash_t * ihash, char *dir, int only_do_savings, int do_recursive)
-{
-  DIR *d;
-  struct dirent *de;
-  char buf[BUFSIZ];
+extern unsigned int count, inodecount, filecount, possiblematchcount, at;
 
-  d = opendir (dir);
-  if (d == NULL)
-    return;
+/* good for 2^64 bytes... a more elegant solution may be desired... */
+extern double reclaimed;
 
-  while ((de = readdir (d)) != NULL)
-    {
-      static struct stat sb;
+extern unsigned int verbose;
 
-      snprintf (buf, BUFSIZ, "%s/%s", dir, de->d_name);
+int epac(int argc, char **argv);
 
-      if (de->d_type == DT_DIR)
-	{
-	  /* dont' care bout "." or "..", that'd be bad recursion */
-	  if (de->d_name[0] == '.' && (de->d_name[1] == 0
-				       || (de->d_name[1] == '.'
-					   && de->d_name[2] == 0)))
-	    continue;
-	  if (do_recursive)
-	    dirspew (ihash, buf, only_do_savings, do_recursive);
-	}
-      else if (!stat (buf, &sb) && sb.st_mode & S_IFREG)
-	{
-	  list_t **hash;
-	  node_t *n = node_new (buf, &sb);
-	  unsigned short slot;
-
-	  if(n==NULL){
-		  printf("bad node (%s)\n", buf);
-		  break;
-	  }
-
-	  hash = (list_t **) ihash->table;
-	  slot = *(unsigned short *)n->data;
-	  hash[slot] = (void *) list_add_at_head ((list_t *) hash[slot], n);
-
-	  count++;
-	  printf ("%d\r", count);
-	}
-    }
-
-  closedir (d);
-  return;
-}
+#endif

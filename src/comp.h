@@ -27,24 +27,17 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.h,v 1.3 2004/02/22 18:19:57 erik Exp $
+ * $Id: comp.h,v 1.1 2004/04/11 15:06:24 erik Exp $
  */
 
-#ifndef EPAC_H
-#define EPAC_H
+#ifndef COMP_H
+#define COMP_H
 
-#define CMPSIZE 256
+#include "list.h"
 
-#define MIN(a,b) (a)<(b)?(a):(b)
-#define MAX(a,b) (a)>(b)?(a):(b)
-
-extern unsigned int count, inodecount, filecount, possiblematchcount, at;
-
-/* good for 2^64 bytes... a more elegant solution may be desired... */
-extern double reclaimed;
-
-extern unsigned int verbose;
-
-int epac(int argc, char **argv);
+struct filegroup_s *combine (struct filegroup_s *a, struct filegroup_s *b);
+struct filegroup_s *possiblematch (struct filegroup_s *a,
+    struct filegroup_s *b);
+void compagainst (struct filegroup_s *a);
 
 #endif

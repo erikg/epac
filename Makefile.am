@@ -1,13 +1,9 @@
-# $Id: Makefile.am,v 1.18 2004/04/11 14:45:11 erik Exp $
+# $Id: Makefile.am,v 1.19 2004/04/11 15:06:23 erik Exp $
 
 if CHECK
 TESTDIR = tests
 endif
-SUBDIRS =  $(TESTDIR)
-
-bin_PROGRAMS = epac
-epac_SOURCES = comp.c display.c epac.c list.c main.c
-noinst_HEADERS = comp.h display.h epac.h list.h
+SUBDIRS = src $(TESTDIR)
 
 dist_man_MANS = epac.1
 EXTRA_DIST = TODO epac.spec.in

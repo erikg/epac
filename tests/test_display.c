@@ -1,12 +1,12 @@
 /*
- * $Id: test_display.c,v 1.1 2004/02/22 18:23:31 erik Exp $
+ * $Id: test_display.c,v 1.2 2004/04/11 15:06:24 erik Exp $
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <check.h>
 
-#include "../display.h"
+#include "display.h"
 #include "test_display.h"
 
 START_TEST (test_display1)

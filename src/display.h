@@ -1,7 +1,7 @@
 
 /*****************************************************************************
- * Erik's Partial Archive Collator                                           *
- * Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>                   *
+ * Erik's Partial Archive Collator
+ * Copyright (C) 2002 Erik Greenwald <erik@smluc.org>                        *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -9,7 +9,7 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger.                                               *
+ * and hardlink to the larger. 
  *                                                                           *
  * This program is free software; you can redistribute it and/or modify      * 
  * it under the terms of the GNU General Public License as published by      *
@@ -27,14 +27,15 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.h,v 1.4 2003/03/02 17:14:11 erik Exp $
+ * $Id: display.h,v 1.1 2004/04/11 15:06:24 erik Exp $
  */
 
-#ifndef __DIR_H_
-#define __DIR_H_
+#ifndef DISPLAY_H
+#define DISPLAY_H
 
-#include "hash.h"
+#include "list.h"
 
-void dirspew (hash_t * t, char *dir, int only_do_savings, int do_recursive);
+void printfilenames (struct filename_s *f);
+void showstatus (float stat);
 
 #endif

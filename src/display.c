@@ -27,15 +27,53 @@
  ****************************************************************************/
 
 /*
- * $Id: display.h,v 1.2 2003/12/27 17:18:55 erik Exp $
+ * $Id: display.c,v 1.1 2004/04/11 15:06:24 erik Exp $
  */
 
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#include <stdio.h>
+#include <math.h>
+#include <unistd.h>
+#include "display.h"
 
-#include "list.h"
+void
+printfilenames (struct filename_s *f)
+{
+    if (f == NULL)
+    {
+	printf ("\n");
+	return;
+    }
+    printf ("%s ", f->filename);
+    printfilenames (f->next);
+    return;
+}
 
-void printfilenames (struct filename_s *f);
-void showstatus (float stat);
+void
+showstatus (float stat)
+{
+    static int dirty = -1;
+    static float last = -1.0;
+    static char buf[1024] =
+	"\r  0.00% [                                                                   ] ";
+    int flooble;
 
-#endif
+    if (fabs (stat - last) < .0001)
+	return;
+
+    last = stat;
+    sprintf (buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%0.02f%%",
+	100.0 * stat);
+    flooble = (int)(67.0 * stat);
+    if (flooble > dirty)
+    {
+	int i;
+
+	dirty = flooble;
+	for (i = 0; i < flooble; ++i)
+	    buf[i + 10] = '=';
+	write (STDOUT_FILENO, buf, 78);
+    } else
+	write (STDOUT_FILENO, buf, 7);
+    fflush (stdout);
+    return;
+}

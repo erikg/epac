@@ -27,14 +27,13 @@
  ****************************************************************************/
 
 /*
- * $Id: cope.c,v 1.2 2003/04/10 18:59:24 erik Exp $
+ * $Id: main.c,v 1.1 2004/04/11 15:06:24 erik Exp $
  */
 
-#include <cope.h>
+#include "epac.h"
 
-void cope_with(list_t *l)
+int
+main (int argc, char **argv)
 {
-	printf("%d\n",list_length(l));
-	return;
+    return epac(argc, argv);
 }
-

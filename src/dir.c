@@ -1,7 +1,7 @@
 
 /*****************************************************************************
- * Erik's Partial Archive Collator
- * Copyright (C) 2002 Erik Greenwald <erik@smluc.org>                        *
+ * Erik's Partial Archive Collator                                           *
+ * Copyright (C) 2002-2003 Erik Greenwald <erik@smluc.org>                   *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -9,7 +9,7 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger. 
+ * and hardlink to the larger.                                               *
  *                                                                           *
  * This program is free software; you can redistribute it and/or modify      * 
  * it under the terms of the GNU General Public License as published by      *
@@ -27,53 +27,69 @@
  ****************************************************************************/
 
 /*
- * $Id: display.c,v 1.2 2003/12/27 17:18:54 erik Exp $
+ * $Id: dir.c,v 1.1 2004/04/11 15:06:24 erik Exp $
  */
 
 #include <stdio.h>
-#include <math.h>
-#include <unistd.h>
-#include "display.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+
+#include "dir.h"
+#include "list.h"
+#include "funcs.h"
+#include "node.h"
+#include "hash.h"
+
+static long long int count = 0, read;
 
 void
-printfilenames (struct filename_s *f)
+dirspew (hash_t * ihash, char *dir, int only_do_savings, int do_recursive)
 {
-    if (f == NULL)
+  DIR *d;
+  struct dirent *de;
+  char buf[BUFSIZ];
+
+  d = opendir (dir);
+  if (d == NULL)
+    return;
+
+  while ((de = readdir (d)) != NULL)
     {
-	printf ("\n");
-	return;
+      static struct stat sb;
+
+      snprintf (buf, BUFSIZ, "%s/%s", dir, de->d_name);
+
+      if (de->d_type == DT_DIR)
+	{
+	  /* dont' care bout "." or "..", that'd be bad recursion */
+	  if (de->d_name[0] == '.' && (de->d_name[1] == 0
+				       || (de->d_name[1] == '.'
+					   && de->d_name[2] == 0)))
+	    continue;
+	  if (do_recursive)
+	    dirspew (ihash, buf, only_do_savings, do_recursive);
+	}
+      else if (!stat (buf, &sb) && sb.st_mode & S_IFREG)
+	{
+	  list_t **hash;
+	  node_t *n = node_new (buf, &sb);
+	  unsigned short slot;
+
+	  if(n==NULL){
+		  printf("bad node (%s)\n", buf);
+		  break;
+	  }
+
+	  hash = (list_t **) ihash->table;
+	  slot = *(unsigned short *)n->data;
+	  hash[slot] = (void *) list_add_at_head ((list_t *) hash[slot], n);
+
+	  count++;
+	  printf ("%d\r", count);
+	}
     }
-    printf ("%s ", f->filename);
-    printfilenames (f->next);
-    return;
-}
 
-void
-showstatus (float stat)
-{
-    static int dirty = -1;
-    static float last = -1.0;
-    static char buf[1024] =
-	"\r  0.00% [                                                                   ] ";
-    int flooble;
-
-    if (fabs (stat - last) < .0001)
-	return;
-
-    last = stat;
-    sprintf (buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%0.02f%%",
-	100.0 * stat);
-    flooble = (int)(67.0 * stat);
-    if (flooble > dirty)
-    {
-	int i;
-
-	dirty = flooble;
-	for (i = 0; i < flooble; ++i)
-	    buf[i + 10] = '=';
-	write (STDOUT_FILENO, buf, 78);
-    } else
-	write (STDOUT_FILENO, buf, 7);
-    fflush (stdout);
-    return;
+  closedir (d);
+  return;
 }

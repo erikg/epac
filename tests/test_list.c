@@ -1,12 +1,12 @@
 /*
- * $Id: test_list.c,v 1.4 2004/04/11 14:46:33 erik Exp $
+ * $Id: test_list.c,v 1.5 2004/04/11 15:06:24 erik Exp $
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <check.h>
 
-#include "../list.h"
+#include "list.h"
 #include "test_list.h"
 
 START_TEST (test_list_add)

@@ -27,13 +27,14 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.2 2004/03/03 14:08:51 erik Exp $
+ * $Id: dir.h,v 1.1 2004/04/11 15:06:24 erik Exp $
  */
 
-#include "epac.h"
+#ifndef __DIR_H_
+#define __DIR_H_
 
-int
-main (int argc, char **argv)
-{
-    return epac(argc, argv);
-}
+#include "hash.h"
+
+void dirspew (hash_t * t, char *dir, int only_do_savings, int do_recursive);
+
+#endif
