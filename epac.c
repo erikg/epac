@@ -26,6 +26,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA *
  ****************************************************************************/
 
+/*
+ * $Id: epac.c,v 1.8 2002/12/12 04:34:59 erik Exp $
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -43,7 +47,7 @@
 	 * it's too large, it'll burn up memory. I suggest something between
 	 * 256 and 4096. This is the 'safe' default... 
 	 */
-#define CMPSIZE 40960
+#define CMPSIZE 4096
 
 #define MIN(a,b) (a)<(b)?(a):(b)
 #define MAX(a,b) (a)>(b)?(a):(b)
