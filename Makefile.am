@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.10 2004/01/02 12:59:19 erik Exp $
+# $Id: Makefile.am,v 1.11 2004/02/22 15:36:41 erik Exp $
 
 bin_PROGRAMS = epac
 epac_SOURCES = comp.c display.c epac.c list.c
@@ -24,3 +24,11 @@ deb:
 
 packages: rpm
 
+docs:
+	doxygen doxygen.conf
+	make -C doxygen/latex 
+	dvips -f doxygen/latex/refman.dvi > refman.ps
+	ps2pdf refman.ps
+
+clean-local:
+	rm -rf doxygen refman.ps refman.pdf

@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.5 2003/12/27 18:28:49 erik Exp $
+dnl $Id: configure.in,v 1.6 2004/02/22 15:36:41 erik Exp $
 
 AC_INIT(epac.c)
 AM_CONFIG_HEADER(config.h)
@@ -12,4 +12,4 @@ AC_CHECK_HEADERS(ctype.h dirent.h fcntl.h math.h stdio.h stdlib.h string.h sys/f
 AC_SEARCH_LIBS(fabs,m,,AC_ERROR(needs fabs!))
 
 
-AC_OUTPUT(Makefile epac.spec)
+AC_OUTPUT(Makefile epac.spec doxygen.conf)
