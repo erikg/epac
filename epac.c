@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.19 2003/02/22 17:08:46 erik Exp $
+ * $Id: epac.c,v 1.20 2003/03/01 18:38:26 erik Exp $
  */
 
 #include <stdio.h>
@@ -37,7 +37,7 @@
 
 #include "dir.h"
 #include "node.h"
-#include "tree.h"
+#include "list.h"
 
 int
 doversion ()
@@ -72,12 +72,12 @@ int
 main (int argc, char **argv)
 {
 	int c, only_do_savings = 0, do_recursive = 0;
-	tree_t *itree = NULL;
+	list_t *ilist = NULL;
 /*
-	tree_t *dtree = NULL;
+	list_t *dlist = NULL;
 */
 
-	tree_t *basedirs = NULL;
+	list_t *basedirs = NULL;
 
 	while ((c = getopt (argc, argv, "hvsr")) != -1)
 		switch (c)
@@ -111,7 +111,7 @@ main (int argc, char **argv)
 
 	while (*argv)
 	{
-		itree = dirspew (itree, *argv, only_do_savings, do_recursive);
+		ilist = dirspew (ilist, *argv, only_do_savings, do_recursive);
 		++argv;
 	}
 
@@ -121,7 +121,7 @@ main (int argc, char **argv)
 		return 0;
 	}
 
-	tree_traverse_inorder (itree, print);
+	list_traverse (ilist, print);
 
 	return EXIT_SUCCESS;
 }

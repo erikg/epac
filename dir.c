@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.c,v 1.7 2003/02/20 14:19:47 erik Exp $
+ * $Id: dir.c,v 1.8 2003/03/01 18:38:26 erik Exp $
  */
 
 #include <stdio.h>
@@ -36,12 +36,14 @@
 #include <dirent.h>
 
 #include "dir.h"
-#include "tree.h"
+#include "list.h"
 #include "funcs.h"
 #include "node.h"
 
-tree_t *
-dirspew (tree_t * itree, char *dir, int only_do_savings, int do_recursive)
+static long long int count=0, read;
+
+list_t *
+dirspew (list_t * ilist, char *dir, int only_do_savings, int do_recursive)
 {
 	DIR *d;
 	struct dirent *de;
@@ -49,7 +51,7 @@ dirspew (tree_t * itree, char *dir, int only_do_savings, int do_recursive)
 
 	d = opendir (dir);
 	if (d == NULL)
-		return itree;
+		return ilist;
 
 	while ((de = readdir (d)) != NULL)
 	{
@@ -64,25 +66,21 @@ dirspew (tree_t * itree, char *dir, int only_do_savings, int do_recursive)
 				|| (de->d_name[1] == '.' && de->d_name[2] == 0)))
 				continue;
 			if (do_recursive)
-				itree =
-				    dirspew (itree, buf, only_do_savings,
+				ilist =
+				    dirspew (ilist, buf, only_do_savings,
 				    do_recursive);
 		} else if (!stat (buf, &sb) && sb.st_mode&S_IFREG)
 		{
-			tree_t *node;
-			node = tree_search(itree, (void *)(sb.st_ino), eq_i);
-			if(node==NULL)
-			{
-				node_t *n = node_new(buf, &sb);
-				itree = tree_add(itree, n, ino_cmp);
-			} else
-			{
-				/* append filename to nodes file list */
-			}
+			list_t *node = NULL;
+			node_t *n = node_new(buf, &sb);
+			ilist = list_add_at_head (ilist, n);
+			count++;
+			printf("%d\r", count);
 		}
 	}
+	printf("\n");
 
 	closedir (d);
-	return itree;
+	return ilist;
 }
 
