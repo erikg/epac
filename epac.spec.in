@@ -1,0 +1,38 @@
+Summary: Reduce disk usage by reducing identical files toa single inode.
+Name: @PACKAGE@
+Version: @VERSION@
+Release: 1
+Copyright: GPL
+Vendor: Erik Greenwald
+Url: http://math.smsu.edu/~erik/software.php?id=92
+Group: Applications/Text
+Source0: http://math.smsu.edu/~erik/files/@PACKAGE@-@VERSION@.tar.gz
+Buildroot: /var/tmp/@PACKAGE@
+
+%description
+Erik's Partial Archive Collator takes a directory as an argument,
+then walks through it looking for duplicate and partially duplicate
+files. If it finds exact duplicates, it deletes one and creates a
+hard link to the other, minimizing disk usage. If it finds a pair of
+files where the larger file contains the entire contents of the
+smaller file, it will prompts to combine them and create a hard link.
+
+%prep
+%setup -q
+%build
+CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=/usr
+
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+make DESTDIR=$RPM_BUILD_ROOT install
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+/usr/*
+
+%changelog
+
