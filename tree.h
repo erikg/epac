@@ -27,19 +27,23 @@
  ****************************************************************************/
 
 /*
- * $Id: tree.h,v 1.3 2003/02/17 21:45:22 erik Exp $
+ * $Id: tree.h,v 1.4 2003/02/22 17:08:46 erik Exp $
  */
 
 #ifndef __TREE_H_
 #define __TREE_H_
 
+#define BLACK 0
+#define RED 1
+
 typedef struct tree_s {
 	void *data;
 	struct tree_s *left, *right;
+	int color:1;
 } tree_t;
 
 tree_t *tree_add (tree_t * tree, void *data, int (*cmp) (void *a, void *b));
 void *tree_search (tree_t * tree, void *data, int (*cmp) (void *a, void *b));
-void tree_traverse_213 (tree_t * node, void (*func) (void *n));
+void tree_traverse_inorder (tree_t * node, void (*func) (void *n));
 
 #endif

@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: tree.c,v 1.5 2003/02/20 14:19:47 erik Exp $
+ * $Id: tree.c,v 1.6 2003/02/22 17:08:46 erik Exp $
  */
 
 #include <stdio.h>
@@ -93,14 +93,14 @@ tree_search (tree_t * tree, void *data, int (*cmp) (void *a, void *b))
 }
 
 void
-tree_traverse_213 (tree_t * tree, void (*func) (void *n))
+tree_traverse_inorder (tree_t * tree, void (*func) (void *n))
 {
 	if (tree == NULL)
 		return;
 	if (tree->left)
-		tree_traverse_213 (tree->left, func);
+		tree_traverse_inorder (tree->left, func);
 	func (tree->data);
 	if (tree->right)
-		tree_traverse_213 (tree->right, func);
+		tree_traverse_inorder (tree->right, func);
 	return;
 }

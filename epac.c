@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.18 2003/02/20 18:28:31 erik Exp $
+ * $Id: epac.c,v 1.19 2003/02/22 17:08:46 erik Exp $
  */
 
 #include <stdio.h>
@@ -121,7 +121,7 @@ main (int argc, char **argv)
 		return 0;
 	}
 
-	tree_traverse_213 (itree, print);
+	tree_traverse_inorder (itree, print);
 
 	return EXIT_SUCCESS;
 }

@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: node.c,v 1.4 2003/02/20 18:28:31 erik Exp $
+ * $Id: node.c,v 1.5 2003/02/22 17:08:46 erik Exp $
  */
 
 #include <stdio.h>
@@ -72,5 +72,5 @@ static void print(char *name)
 
 void node_print_filenames(node_t *n)
 {
-	tree_traverse_213(n->nametree, print);
+	tree_traverse_inorder (n->nametree, print);
 }
