@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.17 2003/02/20 14:19:47 erik Exp $
+ * $Id: epac.c,v 1.18 2003/02/20 18:28:31 erik Exp $
  */
 
 #include <stdio.h>
@@ -36,6 +36,7 @@
 #include <unistd.h>
 
 #include "dir.h"
+#include "node.h"
 #include "tree.h"
 
 int
@@ -64,7 +65,7 @@ dohelp (char *name)
 void
 print (void *n)
 {
-	printf ("%s\n", (char *)n);
+	node_print_filenames((node_t *)n);
 }
 
 int
@@ -120,7 +121,7 @@ main (int argc, char **argv)
 		return 0;
 	}
 
-	tree_traverse_213 (basedirs, print);
+	tree_traverse_213 (itree, print);
 
 	return EXIT_SUCCESS;
 }

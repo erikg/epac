@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: node.h,v 1.2 2003/02/18 23:00:59 erik Exp $
+ * $Id: node.h,v 1.3 2003/02/20 18:28:31 erik Exp $
  */
 
 #ifndef __NODE_H_
@@ -48,5 +48,6 @@ typedef struct node_s
 
 int ino_cmp(void *a, void *b);
 node_t *node_new(char *name, struct stat *sb);
+void node_print_filenames(node_t *n);
 
 #endif
