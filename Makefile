@@ -1,5 +1,5 @@
 PACKAGE=epac
-VERSION=0.2
+VERSION=0.3
 DIST=${PACKAGE}-${VERSION}
 TAR=${DIST}.tar
 BZ=${TAR}.bz2
@@ -7,7 +7,7 @@ GZ=${TAR}.gz
 ZIP=${DIST}.zip
 
 
-CFLAGS+=-pg -ggdb
+#CFLAGS+=-pg -ggdb
 
 epac: epac.o
 	${CC} ${CFLAGS} -o epac epac.o
@@ -17,6 +17,12 @@ epac.o: epac.c
 
 clean:
 	rm -rf epac epac.o ${DIST} ${TAR} ${BZ} ${GZ} ${ZIP} 
+
+install: epac
+	strip epac
+	@echo "*****************************************************************"
+	@echo "*** No automatic installation yet... just cp epac to the dest ***"
+	@echo "*****************************************************************"
 
 dist:
 	rm -rf ${DIST}
