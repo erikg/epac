@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: node.c,v 1.1 2003/02/18 22:46:46 erik Exp $
+ * $Id: node.c,v 1.2 2003/02/18 22:59:12 erik Exp $
  */
 
 #include "node.h"
@@ -41,6 +41,14 @@ int ino_cmp(void *_a, void *_b)
 
 node_t *node_new(char *name, struct stat *sb)
 {
-	
-	return NULL;
+	node_t *n = (node_t *)malloc(sizeof(node_t));
+	memset(n, 0, sizeof(node_t));
+
+	n->nametree = tree_add(NULL, name, ino_cmp);
+	n->size = sb->st_size;
+	n->ino = sb->st_ino;
+	/*
+		n->dev = sb->st_dev;
+	*/
+	return n;
 }
