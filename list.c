@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.3 2003/03/01 18:38:20 erik Exp $
+ * $Id: list.c,v 1.4 2003/03/01 20:00:07 erik Exp $
  */
 
 #include <stdio.h>
@@ -45,9 +45,13 @@ list_add_at_head (list_t * list, void *data)
     {
       list->prev = l;
       l->next = list;
+      l->length = list->length + 1;
     }
   else
-    l->next = NULL;
+    {
+      l->next = NULL;
+      l->length = 1;
+    }
   return l;
 }
 
@@ -98,4 +102,10 @@ list_traverse (list_t * list, void (*func) (void *n))
   if (list->next)
     list_traverse (list->next, func);
   return;
+}
+
+int
+list_length (list_t * list)
+{
+  return list->length;
 }

@@ -27,20 +27,25 @@
  ****************************************************************************/
 
 /*
- * $Id: list.h,v 1.3 2003/03/01 18:38:20 erik Exp $
+ * $Id: list.h,v 1.4 2003/03/01 20:00:07 erik Exp $
  */
 
 #ifndef __LIST_H_
 #define __LIST_H_
 
-typedef struct list_s {
-	void *data;
-	struct list_s *prev, *next;
-} list_t;
+typedef struct list_s
+{
+  void *data;
+  int length;
+  struct list_s *prev, *next;
+}
+list_t;
 
 list_t *list_add (list_t * list, void *data, int (*cmp) (void *a, void *b));
-list_t *list_search (list_t * list, void *data, int (*cmp) (void *a, void *b));
+list_t *list_search (list_t * list, void *data,
+		     int (*cmp) (void *a, void *b));
 void list_traverse (list_t * node, void (*func) (void *n));
-list_t *list_sort (list_t *list, int (*cmp) (void *a, void *b));
+list_t *list_sort (list_t * list, int (*cmp) (void *a, void *b));
+int list_length (list_t * list);
 
 #endif
