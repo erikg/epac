@@ -1,7 +1,7 @@
 
 /*****************************************************************************
- * Erik's Partial Archive Collator
- * Copyright (C) 2002 Erik Greenwald <erik@smluc.org>                        *
+ * Erik's Partial Archive Collator                                           *
+ * Copyright (C) 2002-2005 Erik Greenwald <erik@smluc.org>                   *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -9,9 +9,9 @@
  * minimizing disk usage. If it finds a pair of files where they contain the *
  * same data up to the size of the smaller file, it will prompt if you want  *
  * to combine them. If you say yes, it will delete the smaller of the files  *
- * and hardlink to the larger. 
+ * and hardlink to the larger.                                               *
  *                                                                           *
- * This program is free software; you can redistribute it and/or modify      * 
+ * This program is free software; you can redistribute it and/or modify      *
  * it under the terms of the GNU General Public License as published by      *
  * the Free Software Foundation; either version 2 of the License, or         *
  * (at your option) any later version.                                       *
@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.h,v 1.2 2004/04/11 19:36:08 erik Exp $
+ * $Id: list.h,v 1.3 2005/10/27 01:58:01 erik Exp $
  */
 
 #ifndef LIST_H
