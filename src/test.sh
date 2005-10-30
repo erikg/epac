@@ -25,7 +25,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# $Id: test.sh,v 1.2 2005/10/27 01:58:01 erik Exp $
+# $Id: test.sh,v 1.3 2005/10/30 15:38:59 erik Exp $
 
 SRCDIR=$1
 DSTDIR=$2
@@ -65,11 +65,11 @@ D1=`ls -li $TESTDIR/poo/Makefile | awk '{print $1}'`
 
 #echo $A1 $A2 $A3 $B1 $C1 $D1
 
-test $A1 = $A2 || (echo die "configure != glob" ; exit 1)
-test $A1 = $A3 || (echo die "configure != poo/moo" ; exit 1)
-test $A1 = $B1 && (echo die "crap, configure == README" ; exit 1)
-test $A1 = $C1 && (echo die "crap, configure == configure.ac" ; exit 1)
-test $A1 = $D1 && (echo die "crap, configure == poo/Makefile" ; exit 1)
+test $A1 = $A2 || (echo "configure != glob" ; exit 1)
+test $A1 = $A3 || (echo "configure != poo/moo" ; exit 1)
+test $A1 = $B1 && (echo "crap, configure == README" ; exit 1)
+test $A1 = $C1 && (echo "crap, configure == configure.ac" ; exit 1)
+test $A1 = $D1 && (echo "crap, configure == poo/Makefile" ; exit 1)
 
 # and clean up
 rm -rf $TESTDIR
