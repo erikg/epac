@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: dir.c,v 1.3 2005/10/27 01:58:01 erik Exp $
+ * $Id: dir.c,v 1.4 2005/10/30 17:02:00 erik Exp $
  */
 
 #include <stdio.h>
@@ -46,50 +46,51 @@ static long long int count = 0, read;
 void
 dirspew (hash_t * ihash, char *dir, int only_do_savings, int do_recursive)
 {
-  DIR *d;
-  struct dirent *de;
-  char buf[BUFSIZ];
+    DIR *d;
+    struct dirent *de;
+    char buf[BUFSIZ];
 
-  d = opendir (dir);
-  if (d == NULL)
-    return;
+    d = opendir (dir);
+    if (d == NULL)
+	return;
 
-  while ((de = readdir (d)) != NULL)
+    while ((de = readdir (d)) != NULL)
     {
-      static struct stat sb;
+	static struct stat sb;
 
-      snprintf (buf, BUFSIZ, "%s/%s", dir, de->d_name);
+	snprintf (buf, BUFSIZ, "%s/%s", dir, de->d_name);
 
-      if (de->d_type == DT_DIR)
+	if (de->d_type == DT_DIR)
 	{
-	  /* dont' care bout "." or "..", that'd be bad recursion */
-	  if (de->d_name[0] == '.' && (de->d_name[1] == 0
-				       || (de->d_name[1] == '.'
-					   && de->d_name[2] == 0)))
-	    continue;
-	  if (do_recursive)
-	    dirspew (ihash, buf, only_do_savings, do_recursive);
-	}
-      else if (!stat (buf, &sb) && sb.st_mode & S_IFREG)
+	    /*
+	     * dont' care bout "." or "..", that'd be bad recursion 
+	     */
+	    if (de->d_name[0] == '.' && (de->d_name[1] == 0
+		    || (de->d_name[1] == '.' && de->d_name[2] == 0)))
+		continue;
+	    if (do_recursive)
+		dirspew (ihash, buf, only_do_savings, do_recursive);
+	} else if (!stat (buf, &sb) && sb.st_mode & S_IFREG)
 	{
-	  list_t **hash;
-	  node_t *n = node_new (buf, &sb);
-	  unsigned short slot;
+	    list_t **hash;
+	    node_t *n = node_new (buf, &sb);
+	    unsigned short slot;
 
-	  if(n==NULL){
-		  printf("bad node (%s)\n", buf);
-		  break;
-	  }
+	    if (n == NULL)
+	    {
+		printf ("bad node (%s)\n", buf);
+		break;
+	    }
 
-	  hash = (list_t **) ihash->table;
-	  slot = *(unsigned short *)n->data;
-	  hash[slot] = (void *) list_add_at_head ((list_t *) hash[slot], n);
+	    hash = (list_t **) ihash->table;
+	    slot = *(unsigned short *)n->data;
+	    hash[slot] = (void *)list_add_at_head ((list_t *) hash[slot], n);
 
-	  count++;
-	  printf ("%d\r", count);
+	    count++;
+	    printf ("%d\r", count);
 	}
     }
 
-  closedir (d);
-  return;
+    closedir (d);
+    return;
 }

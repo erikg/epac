@@ -27,13 +27,95 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.4 2005/10/27 01:58:01 erik Exp $
+ * $Id: main.c,v 1.5 2005/10/30 17:02:00 erik Exp $
  */
+
+#include "config.h"
+
+/* this should come out of the src and into configure.ac/config.h */
+#ifdef __linux__
+# ifndef __USE_BSD
+#  define __USE_BSD
+# endif
+#include <getopt.h>
+#include <sys/stat.h>
+#endif
+
+#include <stdlib.h>
+#include <unistd.h>
 
 #include "epac.h"
 
 int
+doversion (char *name)
+{
+    printf ("\
+%s (%s) Copyright (C) 2002-2005 Erik Greenwald <erik@smluc.org>\n\
+%s comes with ABSOLUTELY NO WARRANTY. Please read the GPL for details.\n\n", name, PACKAGE, VERSION);
+    return 0;
+}
+
+int
+dohelp (char *name)
+{
+    doversion (name);
+    printf ("Usage\n\
+\t%s [-hv] [-C [-W <cols>]] <dir>\n\
+\n\
+ -C                   Display completion information\n\
+ -W NUM  --width=NUM  Output at most NUM (default 80) characters per line.\n\
+ -h                   Display this help screen\n\
+ -v                   Display the version\n\
+\n", name);
+    return 0;
+}
+
+int
 main (int argc, char **argv)
 {
+    int c;
+
+    while ((c = getopt (argc, argv, "Chv")) != -1)
+	switch (c)
+	{
+	case 'C':
+	    verbose = 1;
+	    break;
+	case 'W':
+	    display_set_width (atoi (optarg));
+	    break;
+	case 'h':
+	    dohelp (*argv);
+	    return EXIT_SUCCESS;
+	case 'v':
+	    doversion (*argv);
+	    return EXIT_SUCCESS;
+	case 's':		/* not yet */
+	    only_do_savings = 1;
+	    break;
+	case 'r':		/* not yet */
+	    do_recursive = 1;
+	    break;
+	case ':':
+	    printf ("Option \"%s\" missing parameter\n", optarg);
+	    dohelp (*argv);
+	    return 1;
+	case '?':
+	    dohelp (*argv);
+	    return 1;
+	default:
+	    printf ("Unknown error (option: %c)\n", c);
+	    dohelp (*argv);
+	    return 2;
+	}
+    argc -= optind;
+    argv += optind;
+
+    if (argc <= 0)
+    {
+	dohelp (*argv);
+	return 2;
+    }
+
     return epac (argc, argv);
 }

@@ -27,14 +27,14 @@
  ****************************************************************************/
 
 /*
- * $Id: cope.c,v 1.3 2005/10/27 01:58:01 erik Exp $
+ * $Id: cope.c,v 1.4 2005/10/30 17:02:00 erik Exp $
  */
 
 #include <cope.h>
 
-void cope_with(list_t *l)
+void
+cope_with (list_t * l)
 {
-	printf("%d\n",list_length(l));
-	return;
+    printf ("%d\n", list_length (l));
+    return;
 }
-

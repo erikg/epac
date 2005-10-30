@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.h,v 1.3 2005/10/27 01:58:01 erik Exp $
+ * $Id: epac.h,v 1.4 2005/10/30 17:02:00 erik Exp $
  */
 
 #ifndef EPAC_H
@@ -40,7 +40,8 @@
 #define MIN(a,b) (a)<(b)?(a):(b)
 #define MAX(a,b) (a)>(b)?(a):(b)
 
-extern unsigned int count, inodecount, filecount, possiblematchcount, at;
+extern unsigned int count, inodecount, filecount, possiblematchcount, at,
+    only_do_savings, do_recursive, verbose;
 
 /* good for 2^64 bytes... a more elegant solution may be desired... */
 extern double reclaimed;

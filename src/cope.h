@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: cope.h,v 1.3 2005/10/27 01:58:01 erik Exp $
+ * $Id: cope.h,v 1.4 2005/10/30 17:02:00 erik Exp $
  */
 
 #ifndef __COPE_H_
@@ -35,6 +35,6 @@
 
 #include "list.h"
 
-void cope_with(list_t *);
+void cope_with (list_t *);
 
 #endif

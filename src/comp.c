@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.c,v 1.5 2005/10/27 01:58:01 erik Exp $
+ * $Id: comp.c,v 1.6 2005/10/30 17:02:00 erik Exp $
  */
 
 #include <stdio.h>
@@ -77,21 +77,21 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
 	a->files->filename);
 
     fn = b->files;
-    printf("\nb: ");
-    while(fn)
+    printf ("\nb: ");
+    while (fn)
     {
-	printf("%s ", fn->filename);
+	printf ("%s ", fn->filename);
 	fn = fn->next;
     }
 
     fn = a->files;
-    printf("\na: ");
-    while(fn)
+    printf ("\na: ");
+    while (fn)
     {
-	printf("%s ", fn->filename);
+	printf ("%s ", fn->filename);
 	fn = fn->next;
     }
-    printf("\n\n");
+    printf ("\n\n");
 
     fn = b->files;
     fg = b->next;
@@ -113,11 +113,11 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
     reclaimed += (double)b->size;
     printf ("Reclaimed %d bytes (%.0f bytes total (%.0fk %.0fm))\n", b->size,
 	reclaimed, reclaimed / 1024.0, reclaimed / (1024.0 * 1024.0));
-    memset(b, 0, sizeof(b));
+    memset (b, 0, sizeof (b));
     free (b);
     b = NULL;
-    if(a->files == BSDBAD)
-	printf("%s:%d Whoa, a is blown...\n", __FILE__, __LINE__);
+    if (a->files == BSDBAD)
+	printf ("%s:%d Whoa, a is blown...\n", __FILE__, __LINE__);
     return fg;
 }
 
@@ -127,9 +127,9 @@ possiblematch (struct filegroup_s *a, struct filegroup_s *b)
     int size, fa, fb, shortsize;
     void *ba, *bb;
 
-    if(a->files == BSDBAD)
+    if (a->files == BSDBAD)
     {
-	printf("%s:%d A is blown!\n",__FILE__,__LINE__);
+	printf ("%s:%d A is blown!\n", __FILE__, __LINE__);
     }
 
     ++possiblematchcount;
@@ -172,11 +172,11 @@ compagainst (struct filegroup_s *a)
 	    if (verbose)
 		showstatus ((float)at / (float)count);
 
-	    if(a==BSDBAD || a->files == BSDBAD || a->buf == BSDBAD)
-		printf("%s:%d a is blown\n", __FILE__, __LINE__);
+	    if (a == BSDBAD || a->files == BSDBAD || a->buf == BSDBAD)
+		printf ("%s:%d a is blown\n", __FILE__, __LINE__);
 
 	    size = MIN (MIN (a->size, b->size), CMPSIZE);
-	    if (memcmp (a->buf, b->buf, size) == 0) /* seeing a crash here... bus fault... a is all forked up */
+	    if (memcmp (a->buf, b->buf, size) == 0)	/* seeing a crash here... bus fault... a is all forked up */
 	    {
 		struct filegroup_s *fg;
 
@@ -186,9 +186,10 @@ compagainst (struct filegroup_s *a)
 	    } else
 		b = b->next;
 	}
-	if(a->next->buf == BSDBAD)
+	if (a->next->buf == BSDBAD)
 	{
-	    printf("About to walk to a bad a... from %s\n", a->files->filename);
+	    printf ("About to walk to a bad a... from %s\n",
+		a->files->filename);
 	}
 	a = a->next;
     }

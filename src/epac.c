@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.7 2005/10/27 01:58:01 erik Exp $
+ * $Id: epac.c,v 1.8 2005/10/30 17:02:00 erik Exp $
  */
 
 #include <stdio.h>
@@ -35,14 +35,6 @@
 #include <unistd.h>
 #include <dirent.h>
 
-/* this should come out of the src and into configure.ac/config.h */
-#ifdef __linux__
-# ifndef __USE_BSD
-#  define __USE_BSD
-# endif
-#include <getopt.h>
-#include <sys/stat.h>
-#endif
 
 #include "config.h"
 
@@ -58,30 +50,6 @@ unsigned int only_do_savings = 0, do_recursive = 0, verbose = 0;
 double reclaimed = 0.0;
 
 int
-doversion (char *name)
-{
-    printf ("\
-%s (%s) Copyright (C) 2002-2005 Erik Greenwald <erik@smluc.org>\n\
-%s comes with ABSOLUTELY NO WARRANTY. Please read the GPL for details.\n\n", name, PACKAGE, VERSION);
-    return 0;
-}
-
-int
-dohelp (char *name)
-{
-    doversion (name);
-    printf ("Usage\n\
-\t%s [-hv] [-C [-W <cols>]] <dir>\n\
-\n\
- -C                   Display completion information\n\
- -W NUM  --width=NUM  Output at most NUM (default 80) characters per line.\n\
- -h                   Display this help screen\n\
- -v                   Display the version\n\
-\n", name);
-    return 0;
-}
-
-int
 epac (int argc, char **argv)
 {
     DIR *d;
@@ -89,46 +57,6 @@ epac (int argc, char **argv)
     int i = 0, c;
     char buf[BUFSIZ], *name = *argv;
 
-    while ((c = getopt (argc, argv, "Chv")) != -1)
-	switch (c)
-	{
-	case 'C':
-	    verbose = 1;
-	    break;
-	case 'W':
-	    display_set_width (atoi (optarg));
-	    break;
-	case 'h':
-	    dohelp (name);
-	    return EXIT_SUCCESS;
-	case 'v':
-	    doversion (name);
-	    return EXIT_SUCCESS;
-	case 's':		/* not yet */
-	    only_do_savings = 1;
-	    break;
-	case 'r':		/* not yet */
-	    do_recursive = 1;
-	    break;
-	case ':':
-	    printf ("Option \"%s\" missing parameter\n", optarg);
-	    dohelp (name);
-	    return 1;
-	case '?':
-	    dohelp (name);
-	    return 1;
-	default:
-	    printf ("Unknown error (option: %c)\n", c);
-	    dohelp (name);
-	    return 2;
-	}
-    argc -= optind;
-    argv += optind;
-    if (argc <= 0)
-    {
-	dohelp (name);
-	return 2;
-    }
     while (argc--)
     {
 	d = opendir (*argv);
@@ -154,7 +82,8 @@ epac (int argc, char **argv)
     count = inodecount;
     count = (int)((float)count * (float)count / 2.0);
     if (verbose)
-	printf ("\nDir read completed, %d inodes, estimating %d scans\n", inodecount, count);
+	printf ("\nDir read completed, %d inodes, estimating %d scans\n",
+	    inodecount, count);
 
     if (filelist && filelist->next)
 	compagainst (filelist);
