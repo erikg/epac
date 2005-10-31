@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.8 2005/10/30 17:02:00 erik Exp $
+ * $Id: epac.c,v 1.9 2005/10/31 03:26:39 erik Exp $
  */
 
 #include <stdio.h>
@@ -57,20 +57,25 @@ epac (int argc, char **argv)
     int i = 0, c;
     char buf[BUFSIZ], *name = *argv;
 
+    /* for each toplevel dir... */
     while (argc--)
     {
 	d = opendir (*argv);
+	
 	if (d == NULL)
 	    continue;
+
 	while ((de = readdir (d)) != NULL)
 	{
 	    static struct stat sb;
 
 	    sprintf (buf, "%s/%s", *argv, de->d_name);
+
 	    if (stat (buf, &sb) == -1)
 		perror ("stat issue? :");
 	    else if (sb.st_mode & S_IFREG && sb.st_size)
 		addtolist (buf, &sb);
+
 	    if (verbose && !(i % 8))
 		printf ("\rFiles: %d\tInodes: %d", filecount, inodecount),
 		    fflush (stdout);
@@ -103,6 +108,8 @@ epac (int argc, char **argv)
 }
 
 
+/**
+ */
 void
 epac_handle_match (struct filegroup_s *a, struct filegroup_s *b)
 {
@@ -113,7 +120,9 @@ epac_handle_match (struct filegroup_s *a, struct filegroup_s *b)
 	char c[BUFSIZ];
 
 	printf
-	    ("\n====================================================================\n(%d)\t\"%s\"\n(%d)\t\"%s\"\n====================================================================\n",
+	    ("\n====================================================================\
+	      \n(%d)\t\"%s\"\n(%d)\t\"%s\"\
+	      \n====================================================================\n",
 	    a->size, a->files->filename, b->size, b->files->filename);
 	while (1)
 	{
