@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.h,v 1.2 2005/10/27 01:58:01 erik Exp $
+ * $Id: comp.h,v 1.3 2005/10/31 12:48:37 erik Exp $
  */
 
 #ifndef COMP_H
@@ -36,8 +36,6 @@
 #include "list.h"
 
 struct filegroup_s *combine (struct filegroup_s *a, struct filegroup_s *b);
-struct filegroup_s *possiblematch (struct filegroup_s *a,
-    struct filegroup_s *b);
 void compagainst (struct filegroup_s *a);
 
 #endif

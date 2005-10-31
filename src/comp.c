@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.c,v 1.6 2005/10/30 17:02:00 erik Exp $
+ * $Id: comp.c,v 1.7 2005/10/31 12:48:37 erik Exp $
  */
 
 #include <stdio.h>
@@ -42,9 +42,9 @@
 #include "display.h"
 #include "epac.h"
 
-#define BSDBAD  0xd0d0d0d0
+#define BSDBAD(x) ((unsigned int)(x) == 0xd0d0d0d0)
 
-int
+static int
 compare (char *ba, char *bb, int size, int shortsize)
 {
     if (size > shortsize && (memcmp (ba, bb, shortsize)
@@ -54,6 +54,85 @@ compare (char *ba, char *bb, int size, int shortsize)
     return memcmp (ba, bb, size);
 }
 
+static struct filegroup_s *
+possiblematch (struct filegroup_s *a, struct filegroup_s *b)
+{
+    int size, fa, fb, shortsize;
+    void *ba, *bb;
+
+    if (BSDBAD(a->files))
+    {
+	printf ("%s:%d A is blown!\n", __FILE__, __LINE__);
+    }
+
+    ++possiblematchcount;
+    size = MIN (a->size, b->size);
+    shortsize = MIN (size, CMPSIZE);
+
+    fa = open (a->files->filename, O_RDONLY);
+    ba = mmap (0, size, PROT_READ, MAP_SHARED, fa, 0);
+    if (ba == MAP_FAILED)
+	perror ("ba failed");
+
+    fb = open (b->files->filename, O_RDONLY);
+    bb = mmap (0, size, PROT_READ, MAP_SHARED, fb, 0);
+    if (bb == MAP_FAILED)
+	perror ("bb failed");
+
+    if (compare (ba, bb, size, shortsize) == 0)
+	epac_handle_match (a, b);
+
+    munmap (ba, size);
+    munmap (bb, size);
+    close (fa);
+    close (fb);
+    return b;
+}
+
+/********************************************************************/
+
+/** Walk the list and look for possible matches */
+void
+compagainst (struct filegroup_s *a)
+{
+    struct filegroup_s *b;
+
+    while (a && a->next)
+    {
+	b = a->next;
+	while (b)
+	{
+	    int size;
+
+	    ++at;
+	    if (verbose)
+		showstatus ((float)at / (float)count);
+
+	    if (BSDBAD(a) || BSDBAD(a->files) || BSDBAD(a->buf))
+		printf ("%s:%d a is blown\n", __FILE__, __LINE__);
+
+	    size = MIN (MIN (a->size, b->size), CMPSIZE);
+	    if (memcmp (a->buf, b->buf, size) == 0)	/* seeing a crash here... bus fault... a is all forked up */
+	    {
+		struct filegroup_s *fg;
+
+		fg = b;
+		b = b->next;
+		possiblematch (a, fg);
+	    } else
+		b = b->next;
+	}
+	if (BSDBAD(a->next->buf))
+	    printf ("About to walk to a bad a... from %s\n",
+		a->files->filename);
+	a = a->next;
+    }
+    return;
+}
+
+/** This is called when a possible match is found. It executes a careful check,
+ * and either automatically combines or prompts for combination instructions.
+ */
 struct filegroup_s *
 combine (struct filegroup_s *a, struct filegroup_s *b)
 {
@@ -116,82 +195,7 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
     memset (b, 0, sizeof (b));
     free (b);
     b = NULL;
-    if (a->files == BSDBAD)
+    if (BSDBAD(a->files))
 	printf ("%s:%d Whoa, a is blown...\n", __FILE__, __LINE__);
     return fg;
-}
-
-struct filegroup_s *
-possiblematch (struct filegroup_s *a, struct filegroup_s *b)
-{
-    int size, fa, fb, shortsize;
-    void *ba, *bb;
-
-    if (a->files == BSDBAD)
-    {
-	printf ("%s:%d A is blown!\n", __FILE__, __LINE__);
-    }
-
-    ++possiblematchcount;
-    size = MIN (a->size, b->size);
-    shortsize = MIN (size, CMPSIZE);
-
-    fa = open (a->files->filename, O_RDONLY);
-    ba = mmap (0, size, PROT_READ, MAP_SHARED, fa, 0);
-    if (ba == MAP_FAILED)
-	perror ("ba failed");
-
-    fb = open (b->files->filename, O_RDONLY);
-    bb = mmap (0, size, PROT_READ, MAP_SHARED, fb, 0);
-    if (bb == MAP_FAILED)
-	perror ("bb failed");
-
-    if (compare (ba, bb, size, shortsize) == 0)
-	epac_handle_match (a, b);
-
-    munmap (ba, size);
-    munmap (bb, size);
-    close (fa);
-    close (fb);
-    return b;
-}
-
-void
-compagainst (struct filegroup_s *a)
-{
-    struct filegroup_s *b;
-
-    while (a && a->next)
-    {
-	b = a->next;
-	while (b)
-	{
-	    int size;
-
-	    ++at;
-	    if (verbose)
-		showstatus ((float)at / (float)count);
-
-	    if (a == BSDBAD || a->files == BSDBAD || a->buf == BSDBAD)
-		printf ("%s:%d a is blown\n", __FILE__, __LINE__);
-
-	    size = MIN (MIN (a->size, b->size), CMPSIZE);
-	    if (memcmp (a->buf, b->buf, size) == 0)	/* seeing a crash here... bus fault... a is all forked up */
-	    {
-		struct filegroup_s *fg;
-
-		fg = b;
-		b = b->next;
-		possiblematch (a, fg);
-	    } else
-		b = b->next;
-	}
-	if (a->next->buf == BSDBAD)
-	{
-	    printf ("About to walk to a bad a... from %s\n",
-		a->files->filename);
-	}
-	a = a->next;
-    }
-    return;
 }

@@ -27,11 +27,12 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.9 2005/10/31 03:26:39 erik Exp $
+ * $Id: epac.c,v 1.10 2005/10/31 12:48:37 erik Exp $
  */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <unistd.h>
 #include <dirent.h>
 
@@ -54,8 +55,8 @@ epac (int argc, char **argv)
 {
     DIR *d;
     struct dirent *de;
-    int i = 0, c;
-    char buf[BUFSIZ], *name = *argv;
+    int i = 0;
+    char buf[BUFSIZ];
 
     /* for each toplevel dir... */
     while (argc--)

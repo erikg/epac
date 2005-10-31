@@ -27,13 +27,15 @@
  ****************************************************************************/
 
 /*
- * $Id: display.c,v 1.6 2005/10/27 01:58:01 erik Exp $
+ * $Id: display.c,v 1.7 2005/10/31 12:48:37 erik Exp $
  */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include <unistd.h>
+
 #include "display.h"
 
 void

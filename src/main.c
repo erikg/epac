@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.5 2005/10/30 17:02:00 erik Exp $
+ * $Id: main.c,v 1.6 2005/10/31 12:48:37 erik Exp $
  */
 
 #include "config.h"
@@ -41,9 +41,11 @@
 #include <sys/stat.h>
 #endif
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "display.h"
 #include "epac.h"
 
 int
