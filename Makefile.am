@@ -1,9 +1,10 @@
-# $Id: Makefile.am,v 1.19 2004/04/11 15:06:23 erik Exp $
+# $Id: Makefile.am,v 1.20 2005/12/04 18:40:35 erik Exp $
 
-if CHECK
-TESTDIR = tests
-endif
-SUBDIRS = src $(TESTDIR)
+#if CHECK
+#TESTDIR = tests
+#endif
+
+SUBDIRS = src #$(TESTDIR)
 
 dist_man_MANS = epac.1
 EXTRA_DIST = TODO epac.spec.in
