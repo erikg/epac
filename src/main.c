@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.6 2005/10/31 12:48:37 erik Exp $
+ * $Id: main.c,v 1.7 2005/12/04 20:04:56 erik Exp $
  */
 
 #include "config.h"
@@ -44,9 +44,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include "display.h"
 #include "epac.h"
+
+void 
+winch(int signal) 
+{
+    display_set_width (atoi(getenv("COLUMNS")));
+}
 
 int
 doversion (char *name)
@@ -77,6 +84,8 @@ main (int argc, char **argv)
 {
     int c;
 
+    signal(SIGWINCH, winch);
+
     while ((c = getopt (argc, argv, "Chv")) != -1)
 	switch (c)
 	{
@@ -85,6 +94,7 @@ main (int argc, char **argv)
 	    break;
 	case 'W':
 	    display_set_width (atoi (optarg));
+	    signal(SIGWINCH, SIG_IGN);
 	    break;
 	case 'h':
 	    dohelp (*argv);
