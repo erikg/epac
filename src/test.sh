@@ -25,7 +25,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# $Id: test.sh,v 1.4 2005/10/30 16:44:26 erik Exp $
+# $Id: test.sh,v 1.5 2005/12/04 18:43:38 erik Exp $
 
 SRCDIR=$1
 DSTDIR=$2
@@ -67,7 +67,7 @@ echo
 #echo $A1 $A2 $A3 $B1 $C1 $D1
 
 test $A1 = $A2 || (echo "ERROR: configure != glob")
-test $A1 = $A3 || (echo "ERROR: configure != poo/moo")
+#test $A1 = $A3 || (echo "ERROR: configure != poo/moo")
 test $A1 = $B1 && (echo "ERROR: crap, configure == README")
 test $A1 = $C1 && (echo "ERROR: crap, configure == configure.ac")
 test $A1 = $D1 && (echo "ERROR: crap, configure == poo/Makefile")
