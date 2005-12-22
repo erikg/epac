@@ -1,3 +1,13 @@
+20051031:
+	* fixes for -Wall -Werror -ansi -pedantic.
+	* expanded some stuff for increased redability.
+
+20051030:
+	* move arg handling to main.c
+
+20051027:
+	* added a script to perform static testing.
+
 20050105:
 	* autosearch for /usr/local and /sw
 
