@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.7 2005/12/04 20:04:56 erik Exp $
+ * $Id: main.c,v 1.8 2005/12/22 23:43:14 erik Exp $
  */
 
 #include "config.h"
@@ -56,19 +56,19 @@ winch(int signal)
 }
 
 int
-doversion (char *name)
+doversion (FILE *out, char *name)
 {
-    printf ("\
+    fprintf (out, "\
 %s (%s) Copyright (C) 2002-2005 Erik Greenwald <erik@smluc.org>\n\
 %s comes with ABSOLUTELY NO WARRANTY. Please read the GPL for details.\n\n", name, PACKAGE, VERSION);
     return 0;
 }
 
 int
-dohelp (char *name)
+dohelp (FILE *out, char *name)
 {
-    doversion (name);
-    printf ("Usage\n\
+    doversion (out, name);
+    fprintf (out, "Usage\n\
 \t%s [-hv] [-C [-W <cols>]] <dir>\n\
 \n\
  -C                   Display completion information\n\
@@ -97,10 +97,10 @@ main (int argc, char **argv)
 	    signal(SIGWINCH, SIG_IGN);
 	    break;
 	case 'h':
-	    dohelp (*argv);
+	    dohelp (stdout, *argv);
 	    return EXIT_SUCCESS;
 	case 'v':
-	    doversion (*argv);
+	    doversion (stdout, *argv);
 	    return EXIT_SUCCESS;
 	case 's':		/* not yet */
 	    only_do_savings = 1;
@@ -109,15 +109,15 @@ main (int argc, char **argv)
 	    do_recursive = 1;
 	    break;
 	case ':':
-	    printf ("Option \"%s\" missing parameter\n", optarg);
-	    dohelp (*argv);
+	    fprintf (stderr, "Option \"%s\" missing parameter\n", optarg);
+	    dohelp (stderr, *argv);
 	    return 1;
 	case '?':
-	    dohelp (*argv);
+	    dohelp (stderr, *argv);
 	    return 1;
 	default:
-	    printf ("Unknown error (option: %c)\n", c);
-	    dohelp (*argv);
+	    fprintf (stderr, "Unknown error (option: %c)\n", c);
+	    dohelp (stderr, *argv);
 	    return 2;
 	}
     argc -= optind;
@@ -125,7 +125,7 @@ main (int argc, char **argv)
 
     if (argc <= 0)
     {
-	dohelp (*argv);
+	dohelp (stderr, *argv);
 	return 2;
     }
 
