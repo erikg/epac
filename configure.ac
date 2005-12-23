@@ -1,4 +1,4 @@
-dnl $Id: configure.ac,v 1.7 2005/12/04 18:40:36 erik Exp $
+dnl $Id: configure.ac,v 1.8 2005/12/23 00:11:41 erik Exp $
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/epac.c])
@@ -45,5 +45,5 @@ AC_SEARCH_LIBS(fabs,m,,AC_MSG_ERROR([needs fabs!]))
 #AC_SUBST(CHECK_LIBS)
 #AC_SUBST(COVERAGE_CFLAGS)
 
-AC_CONFIG_FILES([Makefile src/Makefile epac.spec doxygen.conf tests/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile epac.spec doxygen.conf])
 AC_OUTPUT
