@@ -1,6 +1,7 @@
 
 20051222:
 	* fixed output fd's for help/version messages
+	* Release 0.4
 
 20051031:
 	* fixes for -Wall -Werror -ansi -pedantic.
