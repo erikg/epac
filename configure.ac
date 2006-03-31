@@ -1,9 +1,9 @@
-dnl $Id: configure.ac,v 1.8 2005/12/23 00:11:41 erik Exp $
+dnl $Id: configure.ac,v 1.9 2006/03/31 19:07:31 erik Exp $
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/epac.c])
 AM_CONFIG_HEADER([config.h])
-AM_INIT_AUTOMAKE(epac, 0.4)
+AM_INIT_AUTOMAKE(epac, 0.5)
 
 AC_PROG_CC
 AC_PROG_INSTALL
