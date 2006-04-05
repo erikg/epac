@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: display.c,v 1.7 2005/10/31 12:48:37 erik Exp $
+ * $Id: display.c,v 1.8 2006/04/05 13:17:22 erik Exp $
  */
 
 #include <stdio.h>
@@ -65,7 +65,7 @@ showstatus (float stat)
 {
     static int dirty = -1;
     static float last = -1.0;
-    static char buf[1024];
+    static char buf[BUFSIZ];
     int flooble;
 
     if (columns == -1)
@@ -93,7 +93,7 @@ showstatus (float stat)
 	return;
 
     last = stat;
-    sprintf (buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%0.02f",
+    snprintf (BUFSIZ, buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%0.02f",
 	100.0 * stat);
     flooble = (int)((columns - 12) * stat);
     if (flooble > dirty)
