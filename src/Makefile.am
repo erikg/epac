@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.4 2005/12/23 00:11:26 erik Exp $
+# $Id: Makefile.am,v 1.5 2006/04/05 13:16:49 erik Exp $
 
 bin_PROGRAMS = epac
 epac_SOURCES = comp.c display.c epac.c list.c main.c
@@ -12,4 +12,4 @@ indent:
 .PHONY : statictest
 
 statictest: epac
-	sh test.sh $(top_srcdir) $(top_builddir)/src/statictest
+	sh $(top_srcdir)/src/test.sh $(top_srcdir) $(top_builddir)/src/statictest
