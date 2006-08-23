@@ -1,4 +1,4 @@
-dnl $Id: configure.ac,v 1.9 2006/03/31 19:07:31 erik Exp $
+dnl $Id: configure.ac,v 1.10 2006/08/23 17:28:18 erik Exp $
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/epac.c])
@@ -8,32 +8,32 @@ AM_INIT_AUTOMAKE(epac, 0.5)
 AC_PROG_CC
 AC_PROG_INSTALL
 
-dnl autosearch /usr/local
-AC_MSG_CHECKING([for /usr/local])
-if test -d /usr/local/include ; then
-        AC_MSG_RESULT([found, adding /usr/local to search paths])
-        CPPFLAGS="$CPPFLAGS -I/usr/local/include"
-        if test -d /usr/local/lib ; then
-                LDFLAGS="$LDFLAGS -L/usr/local/lib"
-        fi
-else
-        AC_MSG_RESULT([not found])
-fi
-
-dnl autosearch fink paths
-AC_MSG_CHECKING([for fink in /sw])
-if test -d /sw/include ; then
-        AC_MSG_RESULT([found, adding /sw to search paths])
-        CPPFLAGS="$CPPFLAGS -I/sw/include"
-        if test -d /sw/lib ; then
-                LDFLAGS="$LDFLAGS -L/sw/lib"
-        fi
-else
-        AC_MSG_RESULT([not found])
-fi
+# dnl autosearch /usr/local
+# AC_MSG_CHECKING([for /usr/local])
+# if test -d /usr/local/include ; then
+#         AC_MSG_RESULT([found, adding /usr/local to search paths])
+#         CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+#         if test -d /usr/local/lib ; then
+#                 LDFLAGS="$LDFLAGS -L/usr/local/lib"
+#         fi
+# else
+#         AC_MSG_RESULT([not found])
+# fi
+# 
+# dnl autosearch fink paths
+# AC_MSG_CHECKING([for fink in /sw])
+# if test -d /sw/include ; then
+#         AC_MSG_RESULT([found, adding /sw to search paths])
+#         CPPFLAGS="$CPPFLAGS -I/sw/include"
+#         if test -d /sw/lib ; then
+#                 LDFLAGS="$LDFLAGS -L/sw/lib"
+#         fi
+# else
+#         AC_MSG_RESULT([not found])
+# fi
 
 AC_CHECK_HEADERS(ctype.h dirent.h fcntl.h math.h stdio.h stdlib.h string.h sys/fcntl.h sys/mman.h sys/stat.h sys/types.h sys/uio.h unistd.h,,AC_MSG_ERROR([Missing necessary headers!]))
-AC_SEARCH_LIBS(fabs,m,,AC_MSG_ERROR([needs fabs!]))
+AC_SEARCH_LIBS(fabs,m,,AC_MSG_ERROR([need fabs() from libm!]))
 
 #COVERAGE_CFLAGS="-fprofile-arcs -ftest-coverage"
 #CHECK_CFLAGS=
