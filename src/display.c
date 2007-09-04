@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: display.c,v 1.8 2006/04/05 13:17:22 erik Exp $
+ * $Id: display.c,v 1.9 2007/09/04 22:24:49 erik Exp $
  */
 
 #include <stdio.h>
@@ -93,7 +93,7 @@ showstatus (float stat)
 	return;
 
     last = stat;
-    snprintf (BUFSIZ, buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), "%0.02f",
+    snprintf (buf + (stat >= 1.0 ? 1 : stat >= .10 ? 2 : 3), BUFSIZ, "%0.02f",
 	100.0 * stat);
     flooble = (int)((columns - 12) * stat);
     if (flooble > dirty)
