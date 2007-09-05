@@ -1,7 +1,7 @@
 
 /*****************************************************************************
  * Erik's Partial Archive Collator                                           *
- * Copyright (C) 2002-2005 Erik Greenwald <erik@smluc.org>                   *
+ * Copyright (C) 2002-2007 Erik Greenwald <erik@smluc.org>                   *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.12 2007/09/05 15:36:09 erik Exp $
+ * $Id: epac.c,v 1.13 2007/09/05 15:48:29 erik Exp $
  */
 
 #include <stdio.h>
