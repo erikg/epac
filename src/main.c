@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.9 2007/09/05 15:48:29 erik Exp $
+ * $Id: main.c,v 1.10 2007/09/05 20:26:12 erik Exp $
  */
 
 #include "config.h"
@@ -52,6 +52,10 @@
 void 
 winch(int signal) 
 {
+    if(signal != SIGWINCH) {
+	    printf("Bad signal caught: %d\n", signal);
+	    exit(EXIT_FAILURE);
+    }
     display_set_width (atoi(getenv("COLUMNS")));
 }
 
