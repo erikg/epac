@@ -25,27 +25,31 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# $Id: test.sh,v 1.5 2005/12/04 18:43:38 erik Exp $
+# $Id: test.sh,v 1.6 2007/09/05 15:03:09 erik Exp $
 
 SRCDIR=$1
 DSTDIR=$2
-TESTDIR=$DSTDIR
+TESTDIR=$DSTDIR/test$$
 
 echo $SRCDIR $DSTDIR $TESTDIR
 
 # create a test directory
-mkdir $TESTDIR $TESTDIR/poo
+mkdir -p $TESTDIR/poo
 cp $SRCDIR/configure.ac $SRCDIR/README $SRCDIR/configure $TESTDIR/
 cp $TESTDIR/configure $TESTDIR/glob
 cp $TESTDIR/glob $TESTDIR/poo/moo
-cp $SRCDIR/src/Makefile $TESTDIR/poo/Makefile
+cp $SRCDIR/src/Makefile.in $TESTDIR/poo/Makefile.in
+ln $TESTDIR/configure.ac $TESTDIR/meep
+ln $TESTDIR/configure.ac $TESTDIR/poo/furk
 
 # Ok, so now we have this directory structure
 #   README
 #   configure
 #   configure.ac
 #   glob
-#   poo/Makefile
+#   meep (same as glob)
+#   poo/Makefile.in
+#   poo/furk (same as glob)
 #   poo/moo
 
 # run epac
@@ -53,6 +57,7 @@ cp $SRCDIR/src/Makefile $TESTDIR/poo/Makefile
 
 # now these files should be the same inode
 # configure glob poo/moo
+# configure.ac meep poo/furk
 
 # verify end result
 
@@ -61,16 +66,21 @@ A2=`ls -li $TESTDIR/glob | awk '{print $1}'`
 A3=`ls -li $TESTDIR/poo/moo | awk '{print $1}'`
 B1=`ls -li $TESTDIR/README | awk '{print $1}'`
 C1=`ls -li $TESTDIR/configure.ac | awk '{print $1}'`
-D1=`ls -li $TESTDIR/poo/Makefile | awk '{print $1}'`
+C2=`ls -li $TESTDIR/meep | awk '{print $1}'`
+C3=`ls -li $TESTDIR/poo/furk | awk '{print $1}'`
+D1=`ls -li $TESTDIR/poo/Makefile.in | awk '{print $1}'`
 
 echo
-#echo $A1 $A2 $A3 $B1 $C1 $D1
+echo $A1 $A2 $A3 
+echo $B1 
+echo $C1 $C2 $C3 
+echo $D1
 
 test $A1 = $A2 || (echo "ERROR: configure != glob")
-#test $A1 = $A3 || (echo "ERROR: configure != poo/moo")
+test $A1 = $A3 || (echo "ERROR: configure != poo/moo")
 test $A1 = $B1 && (echo "ERROR: crap, configure == README")
 test $A1 = $C1 && (echo "ERROR: crap, configure == configure.ac")
-test $A1 = $D1 && (echo "ERROR: crap, configure == poo/Makefile")
+test $A1 = $D1 && (echo "ERROR: crap, configure == poo/Makefile.in")
 
 # and clean up
 rm -rf $TESTDIR
