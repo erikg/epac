@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.c,v 1.8 2007/09/05 15:48:29 erik Exp $
+ * $Id: comp.c,v 1.9 2007/09/05 20:26:00 erik Exp $
  */
 
 #include <stdio.h>
@@ -42,7 +42,7 @@
 #include "display.h"
 #include "epac.h"
 
-#define BSDBAD(x) ((unsigned int)(x) == 0xd0d0d0d0)
+#define BSDBAD(x) ((size_t)(x) == 0xd0d0d0d0)
 
 static int
 compare (char *ba, char *bb, int size, int shortsize)
