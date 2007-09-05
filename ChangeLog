@@ -1,20 +1,23 @@
+20070905:
+	* Improved static testing.
+	* Fixed possible buffer overflows.
 
 20051222:
-	* fixed output fd's for help/version messages
-	* Release 0.4
+	* fixed output fd's for help/version messages.
+	* Release 0.4.
 
 20051031:
 	* fixes for -Wall -Werror -ansi -pedantic.
 	* expanded some stuff for increased redability.
 
 20051030:
-	* move arg handling to main.c
+	* move arg handling to main.c.
 
 20051027:
 	* added a script to perform static testing.
 
 20050105:
-	* autosearch for /usr/local and /sw
+	* autosearch for /usr/local and /sw.
 
 20040725:
 	* error reporting on bad relinking.
@@ -28,32 +31,39 @@
 	* handle different screen widths using $COLUMNS.
 
 20040303:
-	* Fixes for MacOSX.3
+	* Fixes for MacOSX.3.
 
 20040222:
 	* initial testing stuff.
 	* initial doxygen.
 
 20031227:
-	* Release 0.3
+	* Release 0.3.
 	* RPM stuff.
 	* Added linux support.
 
 20031226:
-	* Initial manpage
-	* split display stuff off
-	* use getopt
+	* Initial manpage.
+	* split display stuff off.
+	* use getopt.
 
 20031225:
-	* Move to autoconf
-	* split list module off
+	* Move to autoconf.
+	* split list module off.
 
 200300301:
 	* hash table optimization.
 
 20020812:
-	* Release 0.2
+	* Release 0.2.
 
 20020805:
-	* Release 0.1
+	* Release 0.1.
 
+20020607:
+	* Rewrote 'unify' with improved algorithms, named it 'newunity', still
+	  written in Guile Scheme.
+
+20020424:
+	* Began project under another name (unify), and written in Scheme 
+	  (guile) with a C bit for compute heavy bits.
