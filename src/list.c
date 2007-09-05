@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.6 2005/10/30 17:02:00 erik Exp $
+ * $Id: list.c,v 1.7 2007/09/05 15:23:19 erik Exp $
  */
 
 #include <stdio.h>
@@ -202,4 +202,19 @@ int
 listlength (struct filegroup_s *f)
 {
     return f == NULL ? 0 : 1 + listlength (f->next);
+}
+
+void
+printlist (struct filegroup_s *f)
+{
+    while(f) {
+	struct filename_s *files;
+	printf("%d\n", f->inode);
+	files = f->files;
+	while(files) {
+	    printf("  %s\n", files->filename);
+	    files = files->next;
+	}
+	f = f->next;
+    }
 }
