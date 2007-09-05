@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.11 2007/09/05 15:23:19 erik Exp $
+ * $Id: epac.c,v 1.12 2007/09/05 15:36:09 erik Exp $
  */
 
 #include <stdio.h>
@@ -70,7 +70,7 @@ epac (int argc, char **argv)
 	{
 	    static struct stat sb;
 
-	    sprintf (buf, "%s/%s", *argv, de->d_name);
+	    snprintf (buf, BUFSIZ, "%s/%s", *argv, de->d_name);
 
 	    if (stat (buf, &sb) == -1)
 		perror ("stat issue? :");
@@ -129,13 +129,16 @@ epac_handle_match (struct filegroup_s *a, struct filegroup_s *b)
 	while (1)
 	{
 	    printf ("\aCombine? y/n > ");
-	    scanf ("%s", c);
-	    if (tolower (*c) == 'y')
-	    {
-		b = combine (a, b);
-		break;
-	    } else if (tolower (*c) == 'n')
-		break;
+	    scanf ("%1s", c);
+	    switch(tolower(*c)) {
+		case 'y':
+		    b = combine (a, b);
+		    break;
+		case 'n':
+		    break;
+		default:
+		    printf ("Unknown option \"%c\"\n", *c);
+	    }
 	}
     }
 }
