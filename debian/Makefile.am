@@ -7,6 +7,5 @@ EXTRA_DIST = \
 	copyright \
 	dirs \
 	docs \
-	epac.substvars \
 	files \
 	rules
