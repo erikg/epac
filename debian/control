@@ -1,0 +1,16 @@
+Source: epac
+Section: utils
+Priority: extra
+Maintainer: Erik Greenwald <erik@smluc.org>
+Build-Depends: debhelper (>= 5), autotools-dev
+Standards-Version: 3.7.2
+
+Package: epac
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Create hardlinks of duplicate files
+ Erik's Partial Archive Collator searches the directory for both duplicate
+ and partially duplicate files. Duplicates are automatically compacted
+ by removing one and creating a hardlink to replace it. If a partial
+ match is found (such as a truncated copy of a file was found), the user
+ is prompted.

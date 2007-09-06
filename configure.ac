@@ -25,7 +25,7 @@
 # * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA *
 # ****************************************************************************/
 
-dnl $Id: configure.ac,v 1.11 2007/09/05 16:04:26 erik Exp $
+dnl $Id: configure.ac,v 1.12 2007/09/06 14:41:50 erik Exp $
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/epac.c])
@@ -72,5 +72,5 @@ AC_SEARCH_LIBS(fabs,m,,AC_MSG_ERROR([need fabs() from libm!]))
 #AC_SUBST(CHECK_LIBS)
 #AC_SUBST(COVERAGE_CFLAGS)
 
-AC_CONFIG_FILES([Makefile src/Makefile epac.spec doxygen.conf])
+AC_CONFIG_FILES([Makefile src/Makefile debian/Makefile tests/Makefile epac.spec doxygen.conf])
 AC_OUTPUT

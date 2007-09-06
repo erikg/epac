@@ -25,13 +25,13 @@
 # * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA *
 # ****************************************************************************/
 
-# $Id: Makefile.am,v 1.22 2007/09/05 16:04:26 erik Exp $
+# $Id: Makefile.am,v 1.23 2007/09/06 14:41:50 erik Exp $
 
 #if CHECK
 #TESTDIR = tests
 #endif
 
-SUBDIRS = src #$(TESTDIR)
+SUBDIRS = src tests debian
 
 dist_man_MANS = epac.1
 EXTRA_DIST = TODO epac.spec.in
@@ -44,12 +44,12 @@ rpm: dist
 	cp ${HOME}/rpm/SRPMS/$(PACKAGE)-$(VERSION)-*.src.rpm .
 
 .PHONY : deb
-deb: 
-	debian/rules
-	debuild
-	debc
-	debi
-	release
+deb: dist
+	rm -rf $(PACKAGE)-$(VERSION)
+	tar zxvf $(PACKAGE)-$(VERSION).tar.gz
+	(cd $(PACKAGE)-$(VERSION) && fakeroot debian/rules binary)
+	(cd $(PACKAGE)-$(VERSION) && debuild -us -uc)
+	rm -rf $(PACKAGE)-$(VERSION)
 
 packages: rpm
 

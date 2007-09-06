@@ -25,17 +25,28 @@
 # * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA *
 # ****************************************************************************/
 
-# $Id: Makefile.am,v 1.6 2007/09/05 16:04:26 erik Exp $
+# $Id: Makefile.am,v 1.7 2007/09/06 14:41:50 erik Exp $
 #
 
-noinst_PROGRAMS=test_epac
-epac_src = $(top_srcdir)/src/comp.c $(top_srcdir)/src/display.c $(top_srcdir)/src/epac.c $(top_srcdir)/src/list.c
-tests = test_comp.c test_display.c test_epac.c test_list.c
-test_epac_SOURCES=test.c $(epac_src) $(epac_src:.c=.h) $(tests)
-noinst_HEADERS=$(tests:.c=.h)
+EXTRA_DIST =
+	test.c \
+	test_comp.c \
+	test_comp.h \
+	test_display.c \
+	test_display.h \
+	test_epac.c \
+	test_epac.h \
+	test_list.c \
+	test_list.h
 
-AM_CFLAGS = @CHECK_CFLAGS@ @COVERAGE_CFLAGS@ -I$(top_srcdir)/src/
-LDADD  = @CHECK_LIBS@
+#noinst_PROGRAMS=test_epac
+#epac_src = $(top_srcdir)/src/comp.c $(top_srcdir)/src/display.c $(top_srcdir)/src/epac.c $(top_srcdir)/src/list.c
+#tests = test_comp.c test_display.c test_epac.c test_list.c
+#test_epac_SOURCES=test.c $(epac_src) $(epac_src:.c=.h) $(tests)
+#noinst_HEADERS=$(tests:.c=.h)
+#
+#AM_CFLAGS = @CHECK_CFLAGS@ @COVERAGE_CFLAGS@ -I$(top_srcdir)/src/
+#LDADD  = @CHECK_LIBS@
 
 test: test_epac
 	./test_epac
