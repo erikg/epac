@@ -1,41 +1,44 @@
 20070905:
+	* Fix for doc building out of dir.
+	* Verify signal before winching.
+	* Fix for 64b in comp.c.
 	* Improved static testing.
 	* Fixed possible buffer overflows.
 
 20051222:
-	* fixed output fd's for help/version messages.
+	* Fixed output fd's for help/version messages.
 	* Release 0.4.
 
 20051031:
-	* fixes for -Wall -Werror -ansi -pedantic.
-	* expanded some stuff for increased redability.
+	* Fixes for -Wall -Werror -ansi -pedantic.
+	* Expanded some stuff for increased redability.
 
 20051030:
-	* move arg handling to main.c.
+	* Move arg handling to main.c.
 
 20051027:
-	* added a script to perform static testing.
+	* Added a script to perform static testing.
 
 20050105:
-	* autosearch for /usr/local and /sw.
+	* Autosearch for /usr/local and /sw.
 
 20040725:
-	* error reporting on bad relinking.
+	* Error reporting on bad relinking.
 
 20040423:
-	* added -W width flag to force screen width.
+	* Added -W width flag to force screen width.
 
 20040411:
-	* use src subdir.
-	* print possible matches.
-	* handle different screen widths using $COLUMNS.
+	* Use src subdir.
+	* Print possible matches.
+	* Handle different screen widths using $COLUMNS.
 
 20040303:
 	* Fixes for MacOSX.3.
 
 20040222:
-	* initial testing stuff.
-	* initial doxygen.
+	* Initial testing stuff.
+	* Initial doxygen.
 
 20031227:
 	* Release 0.3.
@@ -44,15 +47,15 @@
 
 20031226:
 	* Initial manpage.
-	* split display stuff off.
-	* use getopt.
+	* Split display stuff off.
+	* Use getopt.
 
 20031225:
 	* Move to autoconf.
-	* split list module off.
+	* Split list module off.
 
 200300301:
-	* hash table optimization.
+	* Hash table optimization.
 
 20020812:
 	* Release 0.2.
