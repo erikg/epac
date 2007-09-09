@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.c,v 1.9 2007/09/05 20:26:00 erik Exp $
+ * $Id: comp.c,v 1.10 2007/09/09 15:08:38 erik Exp $
  */
 
 #include <stdio.h>
@@ -42,7 +42,7 @@
 #include "display.h"
 #include "epac.h"
 
-#define BSDBAD(x) ((size_t)(x) == 0xd0d0d0d0)
+#define BSDBAD(x) ((size_t)(x) == 0x5a5a5a5a)
 
 static int
 compare (char *ba, char *bb, int size, int shortsize)
@@ -152,7 +152,7 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
 	b = tmp;
     }
 
-    printf ("\nCollapsing %s into %s\n", b->files->filename,
+    printf ("\nCollapsing \"%s\" into \"%s\"\n", b->files->filename,
 	a->files->filename);
 
     fn = b->files;
@@ -176,23 +176,30 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
     fg = b->next;
     while (fn)
     {
-	blah = fn;
+	/* re-link */
 	unlink (fn->filename);
 	link (a->files->filename, fn->filename);
 	printf ("\n%s -> %s\n", fn->filename, a->files->filename);
+
+	/* update the lists */
+	addfilename(a, fn->filename);
 	free (fn->filename);
+	fn->filename = NULL;
+
+	/* free the garbage */
+	blah = fn;
 	fn = fn->next;
 	free (blah);
 	blah = NULL;
     }
+    fn=NULL;
+    reclaimed += (double)b->size;
+    printf ("Reclaimed %d bytes (%.0f bytes total (%.0fk %.0fm))\n", b->size,
+	reclaimed, reclaimed / 1024.0, reclaimed / (1024.0 * 1024.0));
     if (b->prev)
 	b->prev->next = b->next;
     if (b->next)
 	b->next->prev = b->prev;
-    reclaimed += (double)b->size;
-    printf ("Reclaimed %d bytes (%.0f bytes total (%.0fk %.0fm))\n", b->size,
-	reclaimed, reclaimed / 1024.0, reclaimed / (1024.0 * 1024.0));
-    memset (b, 0, sizeof (b));
     free (b);
     b = NULL;
     if (BSDBAD(a->files))
