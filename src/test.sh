@@ -25,7 +25,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# $Id: test.sh,v 1.7 2007/09/05 15:48:29 erik Exp $
+# $Id: test.sh,v 1.8 2007/09/09 15:07:39 erik Exp $
 
 SRCDIR=$1
 DSTDIR=$2
@@ -38,6 +38,8 @@ mkdir -p $TESTDIR/poo
 cp $SRCDIR/configure.ac $SRCDIR/README $SRCDIR/configure $TESTDIR/
 cp $TESTDIR/configure $TESTDIR/glob
 cp $TESTDIR/glob $TESTDIR/poo/moo
+dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/zappa bs=1k count=1
+dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/frank bs=1k count=2
 cp $SRCDIR/src/Makefile.in $TESTDIR/poo/Makefile.in
 ln $TESTDIR/configure.ac $TESTDIR/meep
 ln $TESTDIR/configure.ac $TESTDIR/poo/furk
@@ -53,7 +55,10 @@ ln $TESTDIR/configure.ac $TESTDIR/poo/furk
 #   poo/moo
 
 # run epac
-./epac $TESTDIR
+./epac $TESTDIR <<!EOF
+y
+y
+!EOF
 
 # now these files should be the same inode
 # configure glob poo/moo
