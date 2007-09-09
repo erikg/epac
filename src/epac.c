@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.13 2007/09/05 15:48:29 erik Exp $
+ * $Id: epac.c,v 1.14 2007/09/09 15:08:05 erik Exp $
  */
 
 #include <stdio.h>
@@ -133,9 +133,9 @@ epac_handle_match (struct filegroup_s *a, struct filegroup_s *b)
 	    switch(tolower(*c)) {
 		case 'y':
 		    b = combine (a, b);
-		    break;
+		    return;
 		case 'n':
-		    break;
+		    return;
 		default:
 		    printf ("Unknown option \"%c\"\n", *c);
 	    }
