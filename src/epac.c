@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.14 2007/09/09 15:08:05 erik Exp $
+ * $Id: epac.c,v 1.15 2007/09/09 15:09:43 erik Exp $
  */
 
 #include <stdio.h>
@@ -91,7 +91,10 @@ epac (int argc, char **argv)
 	printf ("\nDir read completed, %d inodes, estimating %d scans\n",
 	    inodecount, count);
 
+#ifdef DEBUG
     printlist(filelist);
+#endif
+
     if (filelist && filelist->next)
 	compagainst (filelist);
     else
