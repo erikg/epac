@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.10 2007/09/05 20:26:12 erik Exp $
+ * $Id: main.c,v 1.11 2007/09/10 17:57:04 erik Exp $
  */
 
 #include "config.h"
@@ -52,11 +52,27 @@
 void 
 winch(int signal) 
 {
+    char *width;
+    int w;
     if(signal != SIGWINCH) {
 	    printf("Bad signal caught: %d\n", signal);
 	    exit(EXIT_FAILURE);
     }
-    display_set_width (atoi(getenv("COLUMNS")));
+    width = getenv("COLUMNS");
+    if(width == NULL) {
+	printf("width is nULL\n");
+	return;
+    }
+    if(!isdigit(*width)) {
+	printf("Unknown width: \"%s\"\n", width);
+	return;
+    }
+    w = atoi(width);
+    if(w<40 || w>1000) {
+	printf("bad width: %d\n", w);
+	return;
+    }
+    display_set_width (w);
 }
 
 int
@@ -84,11 +100,12 @@ dohelp (FILE *out, char *name)
 }
 
 int
-main (int argc, char **argv)
+main (int argc, char **argv, char **envp)
 {
     int c;
 
     signal(SIGWINCH, winch);
+    winch(SIGWINCH);
 
     while ((c = getopt (argc, argv, "Chv")) != -1)
 	switch (c)
