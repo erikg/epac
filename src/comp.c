@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.c,v 1.12 2007/09/18 22:56:53 erik Exp $
+ * $Id: comp.c,v 1.13 2007/09/18 23:15:50 erik Exp $
  */
 
 #include <stdio.h>
@@ -194,7 +194,7 @@ combine (struct filegroup_s *a, struct filegroup_s *b)
 	printf ("\n%s -> %s\n", fn->filename, a->files->filename);
 
 	/* update the lists */
-	addfilename(a, fn->filename);
+	list_addfilename(a, fn->filename);
 	free (fn->filename);
 	fn->filename = NULL;
 
