@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.11 2007/09/10 17:57:04 erik Exp $
+ * $Id: main.c,v 1.12 2007/09/18 23:14:58 erik Exp $
  */
 
 #include "config.h"
@@ -43,6 +43,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <unistd.h>
 #include <signal.h>
 
@@ -100,7 +101,7 @@ dohelp (FILE *out, char *name)
 }
 
 int
-main (int argc, char **argv, char **envp)
+main (int argc, char **argv)
 {
     int c;
 
