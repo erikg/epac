@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.c,v 1.10 2007/09/09 15:08:38 erik Exp $
+ * $Id: comp.c,v 1.11 2007/09/18 22:54:47 erik Exp $
  */
 
 #include <stdio.h>
@@ -66,7 +66,9 @@ possiblematch (struct filegroup_s *a, struct filegroup_s *b)
     }
 
     ++possiblematchcount;
-    size = MIN (a->size, b->size);
+    if (a->size < b->size)
+	list_swap(a,b);
+    size = b->size;
     shortsize = MIN (size, CMPSIZE);
 
     fa = open (a->files->filename, O_RDONLY);
@@ -91,7 +93,9 @@ possiblematch (struct filegroup_s *a, struct filegroup_s *b)
 
 /********************************************************************/
 
-/** Walk the list and look for possible matches */
+/** 
+ * Walk the list and look for possible matches 
+ */
 void
 compagainst (struct filegroup_s *a)
 {
@@ -99,6 +103,9 @@ compagainst (struct filegroup_s *a)
 
     while (a && a->next)
     {
+	printf(" <<< \n");
+	list_print(a);
+	printf(" >>> \n");
 	b = a->next;
 	while (b)
 	{
@@ -108,17 +115,30 @@ compagainst (struct filegroup_s *a)
 	    if (verbose)
 		showstatus ((float)at / (float)count);
 
-	    if (BSDBAD(a) || BSDBAD(a->files) || BSDBAD(a->buf))
+	    if (BSDBAD(a))
 		printf ("%s:%d a is blown\n", __FILE__, __LINE__);
+	    if (BSDBAD(a->files))
+		printf ("%s:%d a->files is blown\n", __FILE__, __LINE__);
+	    if (BSDBAD(a->buf))
+		printf ("%s:%d a->buf is blown\n", __FILE__, __LINE__);
 
 	    size = MIN (MIN (a->size, b->size), CMPSIZE);
 	    if (memcmp (a->buf, b->buf, size) == 0)	/* seeing a crash here... bus fault... a is all forked up */
 	    {
-		struct filegroup_s *fg;
+		struct filegroup_s *fg[2];
+		int rez = 0;
 
-		fg = b;
-		b = b->next;
-		possiblematch (a, fg);
+		fg[0] = a;
+		fg[1] = b;
+		rez = possiblematch (a, b);
+		switch(rez) {
+		    case 0:
+			break;
+		    case 1:
+			break;
+		    case 2:
+			break;
+		}
 	    } else
 		b = b->next;
 	}
@@ -130,7 +150,8 @@ compagainst (struct filegroup_s *a)
     return;
 }
 
-/** This is called when a possible match is found. It executes a careful check,
+/** 
+ * This is called when a possible match is found. It executes a careful check,
  * and either automatically combines or prompts for combination instructions.
  */
 struct filegroup_s *
