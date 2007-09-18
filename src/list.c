@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.8 2007/09/05 15:48:29 erik Exp $
+ * $Id: list.c,v 1.9 2007/09/18 22:54:57 erik Exp $
  */
 
 #include <stdio.h>
@@ -60,7 +60,7 @@ struct filegroup_s *filelist = NULL;
  * NOT a copy, do NOT modify it.
  */
 struct filegroup_s *
-searchlist (ino_t inode, struct filegroup_s *fl)
+list_search (ino_t inode, struct filegroup_s *fl)
 {
 
     /*
@@ -68,7 +68,7 @@ searchlist (ino_t inode, struct filegroup_s *fl)
      * cause a segfault or worse
      */
     return fl == NULL
-	|| fl->inode == inode ? fl : searchlist (inode, fl->next);
+	|| fl->inode == inode ? fl : list_search (inode, fl->next);
 }
 
 /**
@@ -174,7 +174,7 @@ list_deletenode (struct filegroup_s *node)
  * @return Void. Nothing. Assumes success.
  */
 void
-addtolist (char *filename, struct stat *sb)
+list_add (char *filename, struct stat *sb)
 {
     struct filegroup_s *fl;
 
@@ -182,7 +182,7 @@ addtolist (char *filename, struct stat *sb)
 
     if (sb->st_size == 0)
 	return;
-    fl = searchlist (sb->st_ino, filelist);
+    fl = list_search (sb->st_ino, filelist);
     if (fl == NULL)
 	filelist = addnewnode (filelist, filename, sb);
     else			/* it's already in the list, just add this
@@ -199,13 +199,13 @@ addtolist (char *filename, struct stat *sb)
  * @return the length of the list
  */
 int
-listlength (struct filegroup_s *f)
+list_length (struct filegroup_s *f)
 {
-    return f == NULL ? 0 : 1 + listlength (f->next);
+    return f == NULL ? 0 : 1 + list_length (f->next);
 }
 
 void
-printlist (struct filegroup_s *f)
+list_print (struct filegroup_s *f)
 {
     while(f) {
 	struct filename_s *files;
@@ -217,4 +217,10 @@ printlist (struct filegroup_s *f)
 	}
 	f = f->next;
     }
+}
+
+void
+list_swap(struct filegroup_s *a, struct filegroup_s *b)
+{
+    return;
 }

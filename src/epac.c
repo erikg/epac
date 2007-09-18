@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.15 2007/09/09 15:09:43 erik Exp $
+ * $Id: epac.c,v 1.16 2007/09/18 22:54:57 erik Exp $
  */
 
 #include <stdio.h>
@@ -75,7 +75,7 @@ epac (int argc, char **argv)
 	    if (stat (buf, &sb) == -1)
 		perror ("stat issue? :");
 	    else if (sb.st_mode & S_IFREG && sb.st_size)
-		addtolist (buf, &sb);
+		list_add (buf, &sb);
 
 	    if (verbose && !(i % 8))
 		printf ("\rFiles: %d\tInodes: %d", filecount, inodecount),
@@ -92,7 +92,7 @@ epac (int argc, char **argv)
 	    inodecount, count);
 
 #ifdef DEBUG
-    printlist(filelist);
+    list_print (filelist);
 #endif
 
     if (filelist && filelist->next)
