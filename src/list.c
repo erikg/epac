@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.c,v 1.9 2007/09/18 22:54:57 erik Exp $
+ * $Id: list.c,v 1.10 2007/09/18 23:15:32 erik Exp $
  */
 
 #include <stdio.h>
@@ -42,7 +42,6 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <unistd.h>
-
 
 #include "epac.h"
 #include "list.h"
@@ -78,7 +77,7 @@ list_search (ino_t inode, struct filegroup_s *fl)
  * @return Void. Nil.
  */
 void
-addfilename (struct filegroup_s *fl, char *filename)
+list_addfilename (struct filegroup_s *fl, char *filename)
 {
     struct filename_s *f;
 
@@ -109,7 +108,7 @@ addnewnode (struct filegroup_s *filelist, char *filename, struct stat *sb)
     new = (struct filegroup_s *)malloc (sizeof (struct filegroup_s));
     memset (new, 0, sizeof (struct filegroup_s));
     new->inode = sb->st_ino;
-    addfilename (new, filename);
+    list_addfilename (new, filename);
     new->size = sb->st_size;
     if ((new->buf = (void *)malloc (size)) == 0)
     {
@@ -187,7 +186,7 @@ list_add (char *filename, struct stat *sb)
 	filelist = addnewnode (filelist, filename, sb);
     else			/* it's already in the list, just add this
 				 * file name to the inode entry */
-	addfilename (fl, filename);
+	list_addfilename (fl, filename);
     return;
 }
 
@@ -222,5 +221,18 @@ list_print (struct filegroup_s *f)
 void
 list_swap(struct filegroup_s *a, struct filegroup_s *b)
 {
+    struct filegroup_s *an, *ap, *bn, *bp;
+
+    printf("SWAPPING: %s (%d) -> %s (%d)\n", a->files->filename, a->inode, b->files->filename, b->inode);
+    an = a->next;
+    ap = a->prev;
+    bn = b->next;
+    bp = b->prev;
+
+    a->next = bn;
+    a->prev = bp;
+    b->next = an;
+    b->prev = bp;
+
     return;
 }
