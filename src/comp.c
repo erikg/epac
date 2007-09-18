@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: comp.c,v 1.11 2007/09/18 22:54:47 erik Exp $
+ * $Id: comp.c,v 1.12 2007/09/18 22:56:53 erik Exp $
  */
 
 #include <stdio.h>
@@ -125,20 +125,11 @@ compagainst (struct filegroup_s *a)
 	    size = MIN (MIN (a->size, b->size), CMPSIZE);
 	    if (memcmp (a->buf, b->buf, size) == 0)	/* seeing a crash here... bus fault... a is all forked up */
 	    {
-		struct filegroup_s *fg[2];
-		int rez = 0;
+		struct filegroup_s *fg;
 
-		fg[0] = a;
-		fg[1] = b;
-		rez = possiblematch (a, b);
-		switch(rez) {
-		    case 0:
-			break;
-		    case 1:
-			break;
-		    case 2:
-			break;
-		}
+		fg = b;
+		b = b->next;
+		possiblematch (a, fg);
 	    } else
 		b = b->next;
 	}
