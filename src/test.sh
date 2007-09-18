@@ -25,7 +25,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# $Id: test.sh,v 1.8 2007/09/09 15:07:39 erik Exp $
+# $Id: test.sh,v 1.9 2007/09/18 22:53:50 erik Exp $
 
 SRCDIR=$1
 DSTDIR=$2
@@ -40,6 +40,10 @@ cp $TESTDIR/configure $TESTDIR/glob
 cp $TESTDIR/glob $TESTDIR/poo/moo
 dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/zappa bs=1k count=1
 dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/frank bs=1k count=2
+dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/90 bs=1 count=90
+dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/100 bs=1 count=100
+dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/110 bs=1 count=110
+dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/120 bs=1 count=120
 cp $SRCDIR/src/Makefile.in $TESTDIR/poo/Makefile.in
 ln $TESTDIR/configure.ac $TESTDIR/meep
 ln $TESTDIR/configure.ac $TESTDIR/poo/furk
@@ -56,6 +60,10 @@ ln $TESTDIR/configure.ac $TESTDIR/poo/furk
 
 # run epac
 ./epac $TESTDIR <<!EOF
+y
+y
+y
+y
 y
 y
 !EOF
