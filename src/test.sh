@@ -25,7 +25,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# $Id: test.sh,v 1.9 2007/09/18 22:53:50 erik Exp $
+# $Id: test.sh,v 1.10 2007/09/18 23:02:43 erik Exp $
 
 SRCDIR=$1
 DSTDIR=$2
@@ -49,14 +49,20 @@ ln $TESTDIR/configure.ac $TESTDIR/meep
 ln $TESTDIR/configure.ac $TESTDIR/poo/furk
 
 # Ok, so now we have this directory structure
+#   100
+#   110
+#   120
+#   90
 #   README
 #   configure
 #   configure.ac
+#   frank
 #   glob
 #   meep (same as glob)
 #   poo/Makefile.in
 #   poo/furk (same as glob)
 #   poo/moo
+#   zappa
 
 # run epac
 ./epac $TESTDIR <<!EOF
@@ -82,12 +88,20 @@ C1=`ls -li $TESTDIR/configure.ac | awk '{print $1}'`
 C2=`ls -li $TESTDIR/meep | awk '{print $1}'`
 C3=`ls -li $TESTDIR/poo/furk | awk '{print $1}'`
 D1=`ls -li $TESTDIR/poo/Makefile.in | awk '{print $1}'`
+D2=`ls -li $TESTDIR/frank | awk '{print $1}'`
+D3=`ls -li $TESTDIR/zappa | awk '{print $1}'`
+D4=`ls -li $TESTDIR/90 | awk '{print $1}'`
+D5=`ls -li $TESTDIR/100 | awk '{print $1}'`
+D6=`ls -li $TESTDIR/110 | awk '{print $1}'`
+D7=`ls -li $TESTDIR/120 | awk '{print $1}'`
+
+ls -liR $TESTDIR | sort -nr
 
 echo
 echo $A1 $A2 $A3 
 echo $B1 
 echo $C1 $C2 $C3 
-echo $D1
+echo $D1 $D2 $D3 $D4 $D5 $D6 $D7
 
 test $A1 = $A2 || (echo "ERROR: configure != glob")
 test $A1 = $A3 || (echo "ERROR: configure != poo/moo")
