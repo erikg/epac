@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.h,v 1.6 2007/09/18 22:54:57 erik Exp $
+ * $Id: list.h,v 1.7 2007/09/18 23:15:07 erik Exp $
  */
 
 #ifndef LIST_H
@@ -52,6 +52,7 @@ struct filegroup_s {
 
 extern struct filegroup_s *filelist;
 
+void list_addfilename (struct filegroup_s *fl, char *filename);
 struct filegroup_s *list_search (ino_t inode, struct filegroup_s *fl);
 void list_add (char *filename, struct stat *sb);
 int list_length (struct filegroup_s *filelist);
