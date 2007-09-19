@@ -25,7 +25,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# $Id: test.sh,v 1.10 2007/09/18 23:02:43 erik Exp $
+# $Id: test.sh,v 1.11 2007/09/19 00:03:52 erik Exp $
 
 SRCDIR=$1
 DSTDIR=$2
@@ -40,19 +40,19 @@ cp $TESTDIR/configure $TESTDIR/glob
 cp $TESTDIR/glob $TESTDIR/poo/moo
 dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/zappa bs=1k count=1
 dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/frank bs=1k count=2
-dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/90 bs=1 count=90
-dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/100 bs=1 count=100
-dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/110 bs=1 count=110
-dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/120 bs=1 count=120
+dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/290 bs=1 count=290
+dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/300 bs=1 count=300
+dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/310 bs=1 count=310
+dd if=$SRCDIR/src/Makefile.in of=$TESTDIR/320 bs=1 count=320
 cp $SRCDIR/src/Makefile.in $TESTDIR/poo/Makefile.in
 ln $TESTDIR/configure.ac $TESTDIR/meep
 ln $TESTDIR/configure.ac $TESTDIR/poo/furk
 
 # Ok, so now we have this directory structure
-#   100
-#   110
-#   120
-#   90
+#   300
+#   310
+#   320
+#   290
 #   README
 #   configure
 #   configure.ac
@@ -65,14 +65,7 @@ ln $TESTDIR/configure.ac $TESTDIR/poo/furk
 #   zappa
 
 # run epac
-./epac $TESTDIR <<!EOF
-y
-y
-y
-y
-y
-y
-!EOF
+yes | ./epac $TESTDIR
 
 # now these files should be the same inode
 # configure glob poo/moo
@@ -90,18 +83,18 @@ C3=`ls -li $TESTDIR/poo/furk | awk '{print $1}'`
 D1=`ls -li $TESTDIR/poo/Makefile.in | awk '{print $1}'`
 D2=`ls -li $TESTDIR/frank | awk '{print $1}'`
 D3=`ls -li $TESTDIR/zappa | awk '{print $1}'`
-D4=`ls -li $TESTDIR/90 | awk '{print $1}'`
-D5=`ls -li $TESTDIR/100 | awk '{print $1}'`
-D6=`ls -li $TESTDIR/110 | awk '{print $1}'`
-D7=`ls -li $TESTDIR/120 | awk '{print $1}'`
+D4=`ls -li $TESTDIR/290 | awk '{print $1}'`
+D5=`ls -li $TESTDIR/300 | awk '{print $1}'`
+D6=`ls -li $TESTDIR/310 | awk '{print $1}'`
+D7=`ls -li $TESTDIR/320 | awk '{print $1}'`
 
-ls -liR $TESTDIR | sort -nr
+find $TESTDIR -type f | xargs ls -li | sort -n
 
 echo
-echo $A1 $A2 $A3 
+echo $A1 $A2 $A3 | xargs -n 1 | sort -n | xargs
 echo $B1 
-echo $C1 $C2 $C3 
-echo $D1 $D2 $D3 $D4 $D5 $D6 $D7
+echo $C1 $C2 $C3 | xargs -n 1 | sort -n | xargs
+echo $D1 $D2 $D3 $D4 $D5 $D6 $D7 | xargs -n 1 | sort -n | xargs
 
 test $A1 = $A2 || (echo "ERROR: configure != glob")
 test $A1 = $A3 || (echo "ERROR: configure != poo/moo")
