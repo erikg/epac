@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.c,v 1.16 2007/09/18 22:54:57 erik Exp $
+ * $Id: epac.c,v 1.17 2007/12/05 14:38:21 erik Exp $
  */
 
 #include <stdio.h>
@@ -46,7 +46,7 @@
 
 unsigned int count = 0, inodecount = 0, filecount = 0, possiblematchcount =
     0, at = 0;
-unsigned int only_do_savings = 0, do_recursive = 0, verbose = 0;
+unsigned int only_do_savings = 0, do_recursive = 0, verbose = 0, autochoose = -1;
 
 double reclaimed = 0.0;
 
@@ -128,19 +128,27 @@ epac_handle_match (struct filegroup_s *a, struct filegroup_s *b)
 	    ("\n====================================================================\
 	      \n(%d)\t\"%s\"\n(%d)\t\"%s\"\
 	      \n====================================================================\n",
-	    a->size, a->files->filename, b->size, b->files->filename);
+	     a->size, a->files->filename, b->size, b->files->filename);
+	if (autochoose == 1)
+	{
+	    b = combine (a, b);
+	    return;
+	}
+	if (autochoose == 0)
+	    return;
 	while (1)
 	{
 	    printf ("\aCombine? y/n > ");
 	    scanf ("%1s", c);
-	    switch(tolower(*c)) {
-		case 'y':
-		    b = combine (a, b);
-		    return;
-		case 'n':
-		    return;
-		default:
-		    printf ("Unknown option \"%c\"\n", *c);
+	    switch (tolower (*c))
+	    {
+	    case 'y':
+		b = combine (a, b);
+		return;
+	    case 'n':
+		return;
+	    default:
+		printf ("Unknown option \"%c\"\n", *c);
 	    }
 	}
     }

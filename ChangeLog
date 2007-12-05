@@ -1,3 +1,6 @@
+20071205:
+	* added "autochoose" (-y|-n) mechanism
+
 20070905:
 	* Fix for doc building out of dir.
 	* Verify signal before winching.

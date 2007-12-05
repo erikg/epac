@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.12 2007/09/18 23:14:58 erik Exp $
+ * $Id: main.c,v 1.13 2007/12/05 14:38:21 erik Exp $
  */
 
 #include "config.h"
@@ -61,7 +61,7 @@ winch(int signal)
     }
     width = getenv("COLUMNS");
     if(width == NULL) {
-	printf("width is nULL\n");
+	printf("width is NULL\n");
 	return;
     }
     if(!isdigit(*width)) {
@@ -95,6 +95,8 @@ dohelp (FILE *out, char *name)
  -C                   Display completion information\n\
  -W NUM  --width=NUM  Output at most NUM (default 80) characters per line.\n\
  -h                   Display this help screen\n\
+ -y                   Assume \"yes\" for prompted actions\n\
+ -n                   Assume \"no\" for prompted actions\n\
  -v                   Display the version\n\
 \n", name);
     return 0;
@@ -108,7 +110,9 @@ main (int argc, char **argv)
     signal(SIGWINCH, winch);
     winch(SIGWINCH);
 
-    while ((c = getopt (argc, argv, "Chv")) != -1)
+    autochoose = -1;
+
+    while ((c = getopt (argc, argv, "Chvyn")) != -1)
 	switch (c)
 	{
 	case 'C':
@@ -129,6 +133,12 @@ main (int argc, char **argv)
 	    break;
 	case 'r':		/* not yet */
 	    do_recursive = 1;
+	    break;
+	case 'y':
+	    autochoose = 1;
+	    break;
+	case 'n':
+	    autochoose = 0;
 	    break;
 	case ':':
 	    fprintf (stderr, "Option \"%s\" missing parameter\n", optarg);

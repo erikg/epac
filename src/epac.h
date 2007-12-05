@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: epac.h,v 1.5 2007/09/05 15:48:29 erik Exp $
+ * $Id: epac.h,v 1.6 2007/12/05 14:38:21 erik Exp $
  */
 
 #ifndef EPAC_H
@@ -41,7 +41,7 @@
 #define MAX(a,b) (a)>(b)?(a):(b)
 
 extern unsigned int count, inodecount, filecount, possiblematchcount, at,
-    only_do_savings, do_recursive, verbose;
+    only_do_savings, do_recursive, verbose, autochoose;
 
 /* good for 2^64 bytes... a more elegant solution may be desired... */
 extern double reclaimed;

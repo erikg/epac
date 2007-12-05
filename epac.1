@@ -26,7 +26,7 @@
 .\" *****************************************************************************
 .\" epac.1 man page for epac
 .\" http://math.missouristate.edu/~erik/software.php?id=92
-.\" $Id: epac.1,v 1.4 2007/09/05 16:04:26 erik Exp $
+.\" $Id: epac.1,v 1.5 2007/12/05 14:38:21 erik Exp $
 .\"===========================================================================
 .Dd August 5, 2002
 .Dt EPAC 1
@@ -40,6 +40,7 @@
 .\".Op Fl Crsvh
 .Op Fl Cvh
 .Op Fl W|--width Ar width
+.Op Fl y|n
 .Ar dir1
 .Op Ar dir2...
 .\"===========================================================================
@@ -62,6 +63,10 @@ Verbose
 .\"Operate recursively
 .It Op Fl w|--width Ar width
 Force the screen width for the progress bar.
+.It Op Fl y
+Assume yes to prompted actions (partial matches).
+.It Op Fl n
+Assume no to prompted actions.
 .It Op Fl v
 Show version and exit.
 .It Op Fl h
