@@ -1,7 +1,7 @@
 
 /*****************************************************************************
  * Erik's Partial Archive Collator                                           *
- * Copyright (C) 2002-2007 Erik Greenwald <erik@smluc.org>                   *
+ * Copyright (C) 2002-2008 Erik Greenwald <erik@smluc.org>                   *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: list.h,v 1.7 2007/09/18 23:15:07 erik Exp $
+ * $Id: list.h,v 1.8 2008/02/01 20:08:53 erik Exp $
  */
 
 #ifndef LIST_H

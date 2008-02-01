@@ -1,6 +1,6 @@
 #/*****************************************************************************
 # * Erik's Partial Archive Collator                                           *
-# * Copyright (C) 2002-2007 Erik Greenwald <erik@smluc.org>                   *
+# * Copyright (C) 2002-2008 Erik Greenwald <erik@smluc.org>                   *
 # *                                                                           *
 # * This program takes a directory as an argument, then walks through the     *
 # * directory looking for duplicate and partially duplicate files. If it      *
@@ -25,7 +25,7 @@
 # * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA *
 # ****************************************************************************/
 
-dnl $Id: configure.ac,v 1.13 2007/09/06 15:06:02 erik Exp $
+dnl $Id: configure.ac,v 1.14 2008/02/01 20:08:53 erik Exp $
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/epac.c])
