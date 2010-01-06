@@ -1,7 +1,7 @@
 
 /*****************************************************************************
  * Erik's Partial Archive Collator                                           *
- * Copyright (C) 2002-2008 Erik Greenwald <erik@smluc.org>                   *
+ * Copyright (C) 2002-2010 Erik Greenwald <erik@smluc.org>                   *
  *                                                                           *
  * This program takes a directory as an argument, then walks through the     *
  * directory looking for duplicate and partially duplicate files. If it      *
@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 /*
- * $Id: main.c,v 1.14 2008/02/01 20:08:53 erik Exp $
+ * $Id: main.c,v 1.15 2010/01/06 01:06:53 erik Exp $
  */
 
 #include "config.h"
@@ -80,7 +80,7 @@ int
 doversion (FILE *out, char *name)
 {
     fprintf (out, "\
-%s (%s) Copyright (C) 2002-2008 Erik Greenwald <erik@smluc.org>\n\
+%s (%s) Copyright (C) 2002-2010 Erik Greenwald <erik@smluc.org>\n\
 %s comes with ABSOLUTELY NO WARRANTY. Please read the GPL for details.\n\n", name, PACKAGE, VERSION);
     return 0;
 }

@@ -1,6 +1,6 @@
 #/*****************************************************************************
 # * Erik's Partial Archive Collator                                           *
-# * Copyright (C) 2002-2008 Erik Greenwald <erik@smluc.org>                   *
+# * Copyright (C) 2002-2010 Erik Greenwald <erik@smluc.org>                   *
 # *                                                                           *
 # * This program takes a directory as an argument, then walks through the     *
 # * directory looking for duplicate and partially duplicate files. If it      *
@@ -25,7 +25,7 @@
 # * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA *
 # ****************************************************************************/
 
-# $Id: Makefile.am,v 1.9 2008/02/01 20:08:53 erik Exp $
+# $Id: Makefile.am,v 1.10 2010/01/06 01:06:53 erik Exp $
 
 bin_PROGRAMS = epac
 epac_SOURCES = comp.c display.c epac.c list.c main.c
